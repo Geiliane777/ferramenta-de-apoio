@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ferramentas de Apoio — OdontoGroup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://img.icons8.com/?size=100&id=VujT2gb9fKd5&format=png&color=000000" type="image/x-icon">
+
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- Mobile top bar -->
+<div class="mobile-topbar">
+  <button class="menu-btn" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </button>
+  <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:var(--teal)">OdontoGroup</span>
+  <label class="toggle-pill" style="margin:0">
+    <input type="checkbox" id="toggleModeBtn2" onchange="syncAndToggle(this)">
+    <div class="toggle-pill-track"></div>
+  </label>
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">OdontoGroup</div>
+    <div class="brand-sub">Ferramentas de Apoio</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-label">Ferramentas</div>
+
+    <div class="nav-item active" onclick="showSection('gerador', this)">
+      <div class="nav-icon">✉️</div>
+      Gerador de textos
+    </div>
+
+    <div class="nav-item" onclick="showSection('prorata', this)">
+      <div class="nav-icon">📅</div>
+      Calcular pró-rata
+    </div>
+
+    <div class="nav-item" onclick="showSection('multa', this)">
+      <div class="nav-icon">⚖️</div>
+      Calcular multa
+    </div>
+
+    <div class="nav-item" onclick="showSection('abrangencias', this)">
+      <div class="nav-icon">🔍</div>
+      Abrangências
+    </div>
+
+    <div class="nav-item" onclick="showSection('redes', this)">
+      <div class="nav-icon">🏥</div>
+      Redes de Atendimento
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <span class="theme-label">Modo claro</span>
+    <label class="toggle-pill">
+      <input type="checkbox" id="toggleModeBtn" onchange="syncAndToggle(this)">
+      <div class="toggle-pill-track"></div>
+    </label>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- Gerador de Textos -->
+  <div id="gerador" class="content-section active">
+    <div class="page-header">
+      <h1 class="page-title">Gerador de textos</h1>
+      <p class="page-subtitle">Preencha os campos para gerar a mensagem personalizada.</p>
+    </div>
+    <div class="card">
+      <div class="form-group" id="nameGroup">
+        <label for="name">Nome do cliente</label>
+        <input type="text" id="name" placeholder="Ex: Ana Paula Silveira">
+      </div>
+
+      <div class="form-group" id="protocolGroup">
+        <label for="protocol">Número do protocolo</label>
+        <input type="text" id="protocol" placeholder="Somente números"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+               pattern="[0-9]*">
+      </div>
+
+      <div class="form-group">
+        <label for="purpose">Finalidade</label>
+        <select id="purpose" onchange="togglePhoneField()">
+          <option value="">— Selecione um tópico —</option>
+          <option value="acusamosRecebimento">Acusar recebimento</option>
+          <option value="acusacaoReembolso">Acusar recebimento — reembolso</option>
+          <option value="agendamento">Agendamento de consulta</option>
+          <option value="alteracaoPlano">Acusar recebimento — alteração de plano GDF</option>
+          <option value="posVendas">Boas-vindas pós-vendas</option>
+          <option value="carteirinha">Carteirinha</option>
+          <option value="coberturaTomo">Cobertura do plano — tomografia</option>
+          <option value="comprovanteCancelamento">Comprovante de cancelamento</option>
+          <option value="demonstrativoIR">Demonstrativo IR — PF</option>
+          <option value="demonstrativoPJ">Demonstrativo IR — PJ</option>
+          <option value="boleto">Envio de boleto</option>
+          <option value="envioRedes">Envio de redes</option>
+          <option value="envioProtocolo">Envio de protocolo</option>
+          <option value="envioToken">Envio de token</option>
+          <option value="formularioReembolso">Formulário de reembolso</option>
+          <option value="guiaContratual">Guia de leitura contratual</option>
+          <option value="inclusaoDepGDFC">Inclusão de dependentes — GDF</option>
+          <option value="contratoNovo">Informações sobre o plano (contrato novo)</option>
+          <option value="semCPF">Solicitar o CPF</option>
+          <option value="solicitaCancelamento">Solicitação de cancelamento</option>
+          <option value="tentativaContato">Tentativa de contato</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="phoneGroup" style="display:none;">
+        <label for="phoneContact">Telefone cadastrado</label>
+        <input type="text" id="phoneContact" placeholder="Ex: (61) 99999-0000">
+      </div>
+
+      <div id="cancelamentoGroup" style="display:none;">
+        <div class="form-group">
+          <label>Vigência mínima de 12 meses cumprida?</label>
+          <div class="radio-group">
+            <label class="radio-pill">
+              <input type="radio" name="vigencia" value="sim">
+              <span class="radio-pill-dot"></span>
+              Sim — sem multa
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="vigencia" value="nao">
+              <span class="radio-pill-dot"></span>
+              Não — com multa
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Mensalidades em aberto?</label>
+          <div class="radio-group">
+            <label class="radio-pill">
+              <input type="radio" name="mensalidade" value="sim">
+              <span class="radio-pill-dot"></span>
+              Sim — em aberto
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="mensalidade" value="nao">
+              <span class="radio-pill-dot"></span>
+              Não — em dia
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" id="mesMensalidadeGroup" style="display:none;">
+          <label for="mesMensalidade">Mês da última mensalidade devida</label>
+          <input type="text" id="mesMensalidade" placeholder="Ex: março/2025">
+        </div>
+      </div>
+
+      <div class="form-group" id="genderGroup">
+        <label>Sexo</label>
+        <div class="radio-group">
+          <label class="radio-pill">
+            <input type="radio" name="gender" value="masculino">
+            <span class="radio-pill-dot"></span>
+            Masculino
+          </label>
+          <label class="radio-pill">
+            <input type="radio" name="gender" value="feminino">
+            <span class="radio-pill-dot"></span>
+            Feminino
+          </label>
+          <label class="radio-pill">
+            <input type="radio" name="gender" value="neutro">
+            <span class="radio-pill-dot"></span>
+            Não sei
+          </label>
+        </div>
+      </div>
+
+      <div id="agendamentoGroup" style="display:none;">
+        <div class="form-group">
+          <label for="agendEspecialidade">Especialidade</label>
+          <input type="text" id="agendEspecialidade" placeholder="Ex: Ortodontia, Endodontia...">
+        </div>
+        <div class="form-group">
+          <label for="agendDataHora">Data e Hora</label>
+          <input type="text" id="agendDataHora" placeholder="Ex: 15/07/2025 às 14h30">
+        </div>
+        <div class="form-group">
+          <label for="agendClinica">Clínica (informações completas)</label>
+          <textarea id="agendClinica" rows="6" placeholder="Ex: Oral Plus Ltda&#10;Endereço: Av João Isper Gebrim, 457&#10;Bairro: Formosinha&#10;Cep: 73813-210&#10;Município: Formosa&#10;Uf: Goias&#10;Celular: (61)3631.5471" style="resize:vertical;"></textarea>
+        </div>
+      </div>
+
+      <button class="btn" onclick="generateText()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        Gerar texto
+      </button>
+
+      <div class="result-section">
+        <div class="result-header">
+          <span class="result-tag">Resultado</span>
+        </div>
+        <div id="generatedText" class="result-area">Preencha os campos acima e clique em "Gerar texto".</div>
+        <div class="result-actions">
+          <button class="btn-ghost" onclick="copiarTexto('generatedText')">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar texto
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pró-rata -->
+  <div id="prorata" class="content-section">
+    <div class="page-header">
+      <h1 class="page-title">Calculadora de pró-rata</h1>
+      <p class="page-subtitle">Calcule o valor proporcional por dias utilizados.</p>
+    </div>
+    <div class="card">
+      <div class="form-group">
+        <label for="valorTotalProduto">Valor total do plano (R$)</label>
+        <input type="number" id="valorTotalProduto" placeholder="Ex: 89.90" step="0.01" min="0">
+      </div>
+
+      <div class="form-group">
+        <label for="quantidadeDias">Quantidade de dias (1–31)</label>
+        <input type="number" id="quantidadeDias" placeholder="Ex: 15" min="1" max="31">
+      </div>
+
+      <button class="btn" onclick="calcularProporcional()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 7H6a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-3M13 3h8m0 0v8m0-8L11 13"/></svg>
+        Calcular
+      </button>
+
+      <div class="result-section">
+        <div class="result-header"><span class="result-tag">Resultado</span></div>
+        <div id="resultadoProporcional" class="result-area">Digite os valores acima para calcular o valor proporcional.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multa -->
+  <div id="multa" class="content-section">
+    <div class="page-header">
+      <h1 class="page-title">Calculadora de multa contratual</h1>
+      <p class="page-subtitle">Calcule a multa de rescisão com base nos meses restantes.</p>
+    </div>
+    <div class="card">
+      <div class="form-group">
+        <label for="valorMensalidade">Valor da mensalidade (R$)</label>
+        <input type="number" id="valorMensalidade" placeholder="Ex: 59.90" step="0.01" min="0">
+      </div>
+
+      <div class="form-group">
+        <label for="mesesFaltantes">Meses restantes no contrato</label>
+        <input type="number" id="mesesFaltantes" placeholder="Ex: 8" min="0">
+      </div>
+
+      <button class="btn" onclick="calcularMulta()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 7H6a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-3M13 3h8m0 0v8m0-8L11 13"/></svg>
+        Calcular
+      </button>
+
+      <div class="result-section">
+        <div class="result-header"><span class="result-tag">Resultado</span></div>
+        <div id="multaResultado" class="result-area">Digite os valores acima para calcular a multa.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Abrangências -->
+  <div id="abrangencias" class="content-section">
+    <div class="page-header">
+      <h1 class="page-title">Abrangências dos planos</h1>
+      <p class="page-subtitle">Consulte os detalhes de cobertura pelo código do produto (Registro ANS).</p>
+    </div>
+    <div class="card">
+      <div class="form-group">
+        <label for="inputNumber">Código do produto (Registro ANS)</label>
+        <input type="number" id="inputNumber" placeholder="Ex: 473269153">
+      </div>
+
+      <button class="btn" onclick="consultarPlano()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        Consultar plano
+      </button>
+
+      <div class="result-section">
+        <div class="result-header"><span class="result-tag">Resultado</span></div>
+        <div id="result" class="result-area">
+          <span id="resultado">Digite o código do produto para consultar.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Redes de Atendimento -->
+  <div id="redes" class="content-section">
+    <div class="page-header">
+      <h1 class="page-title">Redes de Atendimento</h1>
+      <p class="page-subtitle">Selecione o estado e o procedimento para consultar os prestadores disponíveis.</p>
+    </div>
+    <div class="card">
+      <div class="form-group">
+        <label for="redeUF">Unidade Federativa (UF)</label>
+        <select id="redeUF" onchange="consultarRede()">
+          <option value="">— Selecione o estado —</option>
+          <option value="AC">AC — Acre</option>
+          <option value="AL">AL — Alagoas</option>
+          <option value="AP">AP — Amapá</option>
+          <option value="AM">AM — Amazonas</option>
+          <option value="BA">BA — Bahia</option>
+          <option value="CE">CE — Ceará</option>
+          <option value="DF">DF — Distrito Federal</option>
+          <option value="ES">ES — Espírito Santo</option>
+          <option value="GO">GO — Goiás</option>
+          <option value="MA">MA — Maranhão</option>
+          <option value="MT">MT — Mato Grosso</option>
+          <option value="MS">MS — Mato Grosso do Sul</option>
+          <option value="MG">MG — Minas Gerais</option>
+          <option value="PA">PA — Pará</option>
+          <option value="PB">PB — Paraíba</option>
+          <option value="PR">PR — Paraná</option>
+          <option value="PE">PE — Pernambuco</option>
+          <option value="PI">PI — Piauí</option>
+          <option value="RJ">RJ — Rio de Janeiro</option>
+          <option value="RN">RN — Rio Grande do Norte</option>
+          <option value="RS">RS — Rio Grande do Sul</option>
+          <option value="RO">RO — Rondônia</option>
+          <option value="RR">RR — Roraima</option>
+          <option value="SC">SC — Santa Catarina</option>
+          <option value="SP">SP — São Paulo</option>
+          <option value="SE">SE — Sergipe</option>
+          <option value="TO">TO — Tocantins</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="redeProcedimento">Procedimento</label>
+        <select id="redeProcedimento" onchange="consultarRede()">
+          <option value="">— Selecione o procedimento —</option>
+          <option value="siso">Extração de siso</option>
+          <option value="bruxismo">Placa de bruxismo</option>
+        </select>
+      </div>
+
+      <div class="result-section">
+        <div class="result-header"><span class="result-tag">Resultado</span></div>
+        <div id="redeResultado" class="result-area">
+          <div class="no-results"><div class="no-results-icon">🔍</div>Selecione o estado e o procedimento para consultar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.main -->
+
+  <script src="script.js"></script>
+
+<footer class="app-footer">
+  desenvolvido por Wendson Aguiar e Eduardo Rezende ツ
+</footer>
+</body>
+</html>
