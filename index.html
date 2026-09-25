@@ -57,11 +57,6 @@
       <div class="nav-icon">🔍</div>
       Abrangências
     </div>
-
-    <div class="nav-item" onclick="showSection('redes', this)">
-      <div class="nav-icon">🏥</div>
-      Redes de Atendimento
-    </div>
   </nav>
 
   <div class="sidebar-footer">
@@ -306,66 +301,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Redes de Atendimento -->
-  <div id="redes" class="content-section">
-    <div class="page-header">
-      <h1 class="page-title">Redes de Atendimento</h1>
-      <p class="page-subtitle">Selecione o estado e o procedimento para consultar os prestadores disponíveis.</p>
-    </div>
-    <div class="card">
-      <div class="form-group">
-        <label for="redeUF">Unidade Federativa (UF)</label>
-        <select id="redeUF" onchange="consultarRede()">
-          <option value="">— Selecione o estado —</option>
-          <option value="AC">AC — Acre</option>
-          <option value="AL">AL — Alagoas</option>
-          <option value="AP">AP — Amapá</option>
-          <option value="AM">AM — Amazonas</option>
-          <option value="BA">BA — Bahia</option>
-          <option value="CE">CE — Ceará</option>
-          <option value="DF">DF — Distrito Federal</option>
-          <option value="ES">ES — Espírito Santo</option>
-          <option value="GO">GO — Goiás</option>
-          <option value="MA">MA — Maranhão</option>
-          <option value="MT">MT — Mato Grosso</option>
-          <option value="MS">MS — Mato Grosso do Sul</option>
-          <option value="MG">MG — Minas Gerais</option>
-          <option value="PA">PA — Pará</option>
-          <option value="PB">PB — Paraíba</option>
-          <option value="PR">PR — Paraná</option>
-          <option value="PE">PE — Pernambuco</option>
-          <option value="PI">PI — Piauí</option>
-          <option value="RJ">RJ — Rio de Janeiro</option>
-          <option value="RN">RN — Rio Grande do Norte</option>
-          <option value="RS">RS — Rio Grande do Sul</option>
-          <option value="RO">RO — Rondônia</option>
-          <option value="RR">RR — Roraima</option>
-          <option value="SC">SC — Santa Catarina</option>
-          <option value="SP">SP — São Paulo</option>
-          <option value="SE">SE — Sergipe</option>
-          <option value="TO">TO — Tocantins</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="redeProcedimento">Procedimento</label>
-        <select id="redeProcedimento" onchange="consultarRede()">
-          <option value="">— Selecione o procedimento —</option>
-          <option value="siso">Extração de siso</option>
-          <option value="bruxismo">Placa de bruxismo</option>
-        </select>
-      </div>
-
-      <div class="result-section">
-        <div class="result-header"><span class="result-tag">Resultado</span></div>
-        <div id="redeResultado" class="result-area">
-          <div class="no-results"><div class="no-results-icon">🔍</div>Selecione o estado e o procedimento para consultar.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div><!-- /.main -->
 
   <script src="script.js"></script>
