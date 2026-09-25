@@ -7,8 +7,6 @@
     closeSidebar();
   }
 
-
-
   // ─── Sidebar mobile ───
   function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('open');
@@ -41,7 +39,7 @@
       setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; btn.style.borderColor = ''; }, 1800);
     }
 
-    if (navigator.clipboard && window\.isSecureContext) {
+    if (navigator.clipboard && window.isSecureContext) {
       navigator.clipboard.writeText(text).then(mostrarSucesso).catch(() => copiarFallback(text, mostrarSucesso));
     } else {
       copiarFallback(text, mostrarSucesso);
@@ -51,7 +49,7 @@
   function copiarFallback(text, callback) {
     const ta = document.createElement('textarea');
     ta.value = text;
-    ta.style.cssText = 'position\:fixed;top:-9999px;left:-9999px;opacity:0';
+    ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
     document.body.appendChild(ta);
     ta.focus();
     ta.select();
@@ -70,36 +68,36 @@
     const totalMesesContrato = 13;
 
     if (isNaN(valorMensalidade) || valorMensalidade <= 0 || isNaN(mesesFaltantes) || mesesFaltantes < 0) {
-      resultadoEl.innerHTML = '\<span style="color\:rgba(255,100,100,0.8)">⚠ Insira valores válidos.\</span>';
+      resultadoEl.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Insira valores válidos.</span>';
       return;
     }
     if (mesesFaltantes > totalMesesContrato) {
-      resultadoEl.innerHTML = \`\<span style="color\:rgba(255,100,100,0.8)">⚠ Os meses faltantes não podem exceder ${totalMesesContrato}.\</span>\`;
+      resultadoEl.innerHTML = `<span style="color:rgba(255,100,100,0.8)">⚠ Os meses faltantes não podem exceder ${totalMesesContrato}.</span>`;
       return;
     }
 
-    const totalRestante = valorMensalidade \* mesesFaltantes;
-    const multa = totalRestante \* 0.20;
+    const totalRestante = valorMensalidade * mesesFaltantes;
+    const multa = totalRestante * 0.20;
 
-    resultadoEl.innerHTML = \`
-      \<div class="calc-result-grid">
-        \<div class="calc-card">
-          \<div class="calc-card-label">Mensalidade\</div>
-          \<div class="calc-card-value">R$ ${valorMensalidade.toFixed(2)}\</div>
-        \</div>
-        \<div class="calc-card">
-          \<div class="calc-card-label">Meses restantes\</div>
-          \<div class="calc-card-value">${mesesFaltantes}\</div>
-        \</div>
-        \<div class="calc-card">
-          \<div class="calc-card-label">Total de mensalidades\</div>
-          \<div class="calc-card-value">R$ ${totalRestante.toFixed(2)}\</div>
-        \</div>
-        \<div class="calc-card highlight">
-          \<div class="calc-card-label">Multa a pagar (20%)\</div>
-          \<div class="calc-card-value">R$ ${multa.toFixed(2)}\</div>
-        \</div>
-      \</div>\`;
+    resultadoEl.innerHTML = `
+      <div class="calc-result-grid">
+        <div class="calc-card">
+          <div class="calc-card-label">Mensalidade</div>
+          <div class="calc-card-value">R$ ${valorMensalidade.toFixed(2)}</div>
+        </div>
+        <div class="calc-card">
+          <div class="calc-card-label">Meses restantes</div>
+          <div class="calc-card-value">${mesesFaltantes}</div>
+        </div>
+        <div class="calc-card">
+          <div class="calc-card-label">Total de mensalidades</div>
+          <div class="calc-card-value">R$ ${totalRestante.toFixed(2)}</div>
+        </div>
+        <div class="calc-card highlight">
+          <div class="calc-card-label">Multa a pagar (20%)</div>
+          <div class="calc-card-value">R$ ${multa.toFixed(2)}</div>
+        </div>
+      </div>`;
   }
 
   // ─── Pró-rata ───
@@ -109,32 +107,32 @@
     const resultadoElement = document.getElementById("resultadoProporcional");
 
     if (isNaN(valorTotal) || valorTotal <= 0 || isNaN(dias) || dias <= 0 || dias > 31) {
-      resultadoElement.innerHTML = '\<span style="color\:rgba(255,100,100,0.8)">⚠ Insira valores válidos (dias entre 1 e 31).\</span>';
+      resultadoElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Insira valores válidos (dias entre 1 e 31).</span>';
       return;
     }
 
     const valorPorDia = valorTotal / 30;
-    const valorFinal = valorPorDia \* dias;
+    const valorFinal = valorPorDia * dias;
 
-    resultadoElement.innerHTML = \`
-      \<div class="calc-result-grid">
-        \<div class="calc-card">
-          \<div class="calc-card-label">Valor total do plano\</div>
-          \<div class="calc-card-value">R$ ${valorTotal.toFixed(2)}\</div>
-        \</div>
-        \<div class="calc-card">
-          \<div class="calc-card-label">Valor por dia\</div>
-          \<div class="calc-card-value">R$ ${valorPorDia.toFixed(2)}\</div>
-        \</div>
-        \<div class="calc-card">
-          \<div class="calc-card-label">Dias\</div>
-          \<div class="calc-card-value">${dias}\</div>
-        \</div>
-        \<div class="calc-card highlight">
-          \<div class="calc-card-label">Valor pró-rata\</div>
-          \<div class="calc-card-value">R$ ${valorFinal.toFixed(2)}\</div>
-        \</div>
-      \</div>\`;
+    resultadoElement.innerHTML = `
+      <div class="calc-result-grid">
+        <div class="calc-card">
+          <div class="calc-card-label">Valor total do plano</div>
+          <div class="calc-card-value">R$ ${valorTotal.toFixed(2)}</div>
+        </div>
+        <div class="calc-card">
+          <div class="calc-card-label">Valor por dia</div>
+          <div class="calc-card-value">R$ ${valorPorDia.toFixed(2)}</div>
+        </div>
+        <div class="calc-card">
+          <div class="calc-card-label">Dias</div>
+          <div class="calc-card-value">${dias}</div>
+        </div>
+        <div class="calc-card highlight">
+          <div class="calc-card-label">Valor pró-rata</div>
+          <div class="calc-card-value">R$ ${valorFinal.toFixed(2)}</div>
+        </div>
+      </div>`;
   }
 
   // ─── Greeter ───
@@ -147,35 +145,35 @@
     const prep = ['de', 'da', 'do', 'das', 'dos', 'e'];
     return nome.trim().toLowerCase().split(/\s+/).map((w, i) => {
       if (i !== 0 && prep.includes(w)) return w;
-      return w\.charAt(0).toUpperCase() + w\.slice(1);
+      return w.charAt(0).toUpperCase() + w.slice(1);
     }).join(' ');
   }
 
   // ─── Texts ───
   const texts = {
-    tentativaContato: \`Título: ODONTOGROUP - TENTATIVA DE CONTATO
+    tentativaContato: `Título: ODONTOGROUP - TENTATIVA DE CONTATO
 
 {gender} {name}, {greeting}!
 
 Tentamos contato através do telefone {phone}, porém não obtivemos sucesso.
-Por gentileza, entre em contato com a nossa central de atendimento o mais breve possível referente à sua solicitação do protocolo de atendimento n.º {protocol}.\`,
+Por gentileza, entre em contato com a nossa central de atendimento o mais breve possível referente à sua solicitação do protocolo de atendimento n.º {protocol}.`,
 
-    acusamosRecebimento: \`{gender} {name}, {greeting}!
+    acusamosRecebimento: `{gender} {name}, {greeting}!
 
-Acusamos o recebimento da sua solicitação por meio do protocolo de n.º {protocol}, iremos verificar as informações relatadas e em breve retornaremos com mais informações.\`,
+Acusamos o recebimento da sua solicitação por meio do protocolo de n.º {protocol}, iremos verificar as informações relatadas e em breve retornaremos com mais informações.`,
 
-    comprovanteCancelamento: \`Título: ODONTOGROUP - COMPROVANTE DE CANCELAMENTO
+    comprovanteCancelamento: `Título: ODONTOGROUP - COMPROVANTE DE CANCELAMENTO
 
 {gender} {name}, {greeting}!
 
-Em atenção à sua solicitação realizada através do protocolo de n.º {protocol}, segue em anexo o comprovante de cancelamento do contrato.\`,
+Em atenção à sua solicitação realizada através do protocolo de n.º {protocol}, segue em anexo o comprovante de cancelamento do contrato.`,
 
-    acusacaoReembolso: \`{gender} {name}, {greeting}!
+    acusacaoReembolso: `{gender} {name}, {greeting}!
 
 Acusamos o recebimento da sua solicitação através do protocolo de n.º {protocol} e informamos que a documentação foi direcionada ao setor responsável para análise.
-Em breve retornaremos o contato com mais informações.\`,
+Em breve retornaremos o contato com mais informações.`,
 
-    envioRedes: \`Título: ODONTOGROUP - REDES DE ATENDIMENTO
+    envioRedes: `Título: ODONTOGROUP - REDES DE ATENDIMENTO
 
 {gender} {name}, {greeting}!
 
@@ -183,9 +181,9 @@ Em atenção à sua solicitação realizada sob protocolo de n° {protocol}, seg
 
 (indicação de rede)
 
-Orientamos que entre em contato com as clínicas para realizar o agendamento de consulta, caso tenha dificuldade em realizar o contato junto as clínicas, entre em contato com a nossa central de atendimento para que possamos lhe auxiliar.\`,
+Orientamos que entre em contato com as clínicas para realizar o agendamento de consulta, caso tenha dificuldade em realizar o contato junto as clínicas, entre em contato com a nossa central de atendimento para que possamos lhe auxiliar.`,
 
-    agendamento: \`Título: ODONTOGROUP - AGENDAMENTO DE CONSULTA
+    agendamento: `Título: ODONTOGROUP - AGENDAMENTO DE CONSULTA
 
 {gender} {name}, {greeting}!
 
@@ -197,22 +195,22 @@ Clínica: {agendClinica}
 
 Por gentileza, chegue à consulta com antecedência de 10 minutos e leve raio-x, caso possua, isso facilita o seu atendimento.
 
-Obs.: Caso não consiga comparecer ao agendamento informado acima, na data e horário marcado, por gentileza, orientamos que entre em contato diretamente com a clínica para realizar o reagendamento de sua consulta no prazo indicado (24horas de antecedência).\`,
+Obs.: Caso não consiga comparecer ao agendamento informado acima, na data e horário marcado, por gentileza, orientamos que entre em contato diretamente com a clínica para realizar o reagendamento de sua consulta no prazo indicado (24horas de antecedência).`,
 
-    carteirinha: \`Título: ODONTOGROUP - CARTEIRINHA
+    carteirinha: `Título: ODONTOGROUP - CARTEIRINHA
 
 {gender} {name}, {greeting}!
 
 Em atenção à sua solicitação realizada por meio do protocolo de n.º {protocol}, segue em anexo sua carteirinha virtual do plano odontológico.
 
 Baixe nosso aplicativo para acessá-la de forma simples e online. 
-Caso ainda não possua nosso aplicativo, basta buscar por "OdontoGroup Associado" na loja de aplicativos do seu dispositivo celular e realizar o primeiro acesso.\`,
+Caso ainda não possua nosso aplicativo, basta buscar por "OdontoGroup Associado" na loja de aplicativos do seu dispositivo celular e realizar o primeiro acesso.`,
 
-    semCPF: \`Prezado(a) cliente, {greeting}!
+    semCPF: `Prezado(a) cliente, {greeting}!
 
-Acusamos o recebimento da sua solicitação e para que possamos localizar o seu contrato, informe-nos seu nome completo, CPF e telefone.\`,
+Acusamos o recebimento da sua solicitação e para que possamos localizar o seu contrato, informe-nos seu nome completo, CPF e telefone.`,
 
-    formularioReembolso: \`Título: ODONTOGROUP - FORMULÁRIO DE REQUISIÇÃO DE REEMBOLSO
+    formularioReembolso: `Título: ODONTOGROUP - FORMULÁRIO DE REQUISIÇÃO DE REEMBOLSO
 
 {gender} {name}, {greeting}!
 
@@ -228,51 +226,49 @@ Solicitamos também que encaminhe, juntamente às documentações já mencionada
 
 Esclarecemos que o comprovante de pagamento referido pode ser a via emitida pela máquina no caso de pagamento via cartão, um print do desconto em seu aplicativo bancário ou comprovante de transferência no caso de pagamento por PIX ou transferência bancária.
 
-Ao realizar o envio da documentação completa e análise da solicitação pela Operadora, sendo essa aprovada, o pagamento do reembolso será em até 30 dias.\`,
+Ao realizar o envio da documentação completa e análise da solicitação pela Operadora, sendo essa aprovada, o pagamento do reembolso será em até 30 dias.`,
 
-    boleto: \`Título: ODONTOGROUP - BOLETO
-
-{gender} {name}, {greeting}!
-
-Em atenção à sua solicitação realizada através do protocolo de n.º {protocol}, segue em anexo o boleto referente ao período solicitado.\`,
-
-    guiaContratual: \`Título: ODONTOGROUP - GUIA DE LEITURA CONTRATUAL
+    boleto: `Título: ODONTOGROUP - BOLETO
 
 {gender} {name}, {greeting}!
 
-Em atenção à sua solicitação realizada por meio do protocolo de n.º {protocol}, segue em anexo o Guia de Leitura Contratual contendo todas as informações referente ao produto contratado, inclusive a cobertura do plano odontológico.\`,
+Em atenção à sua solicitação realizada através do protocolo de n.º {protocol}, segue em anexo o boleto referente ao período solicitado.`,
 
-    exclusaoProposta: \`Título: ODONTOGROUP - EXCLUSÃO DE PROPOSTA
+    guiaContratual: `Título: ODONTOGROUP - GUIA DE LEITURA CONTRATUAL
+
+{gender} {name}, {greeting}!
+
+Em atenção à sua solicitação realizada por meio do protocolo de n.º {protocol}, segue em anexo o Guia de Leitura Contratual contendo todas as informações referente ao produto contratado, inclusive a cobertura do plano odontológico.`,
+
+    exclusaoProposta: `Título: ODONTOGROUP - EXCLUSÃO DE PROPOSTA
 
 Prezados, {greeting}!
 
 Conforme atendimento realizado através do protocolo de n.º {protocol}, por gentileza, efetuar o cancelamento da proposta em aberto nos dados abaixo:
 
 Nome: [NOME COMPLETO]
-CPF: [CPF]\`,
+CPF: [CPF]`,
 
-    demonstrativoIR: \`Título: ODONTOGROUP - DEMONSTRATIVO PARA IMPOSTO DE RENDA
+    demonstrativoIR: `Título: ODONTOGROUP - DEMONSTRATIVO PARA IMPOSTO DE RENDA
 
 {gender} {name}, {greeting}!
 
 Em atenção à sua solicitação realizada por meio do protocolo de n.º {protocol}, segue em anexo o demonstrativo para comprovação de imposto de renda referente ao ano de 2025. 
 
-Acrescentamos que o demonstrativo também está disponível em nosso aplicativo "OdontoGroup – Associado".\`,
+Acrescentamos que o demonstrativo também está disponível em nosso aplicativo "OdontoGroup – Associado".`,
 
-    demonstrativoPJ: \`Título: ODONTOGROUP - DEMONSTRATIVO PARA IMPOSTO DE RENDA - PJ
+    demonstrativoPJ: `Título: ODONTOGROUP - DEMONSTRATIVO PARA IMPOSTO DE RENDA - PJ
 
 {gender} {name}, {greeting}!
 
 Em atendimento à sua solicitação realizada por meio do protocolo de n.º {protocol}, informamos que, por se tratar de um plano empresarial, o seu demonstrativo para Imposto de Renda deve ser solicitado diretamente ao setor de Recursos Humanos (RH) da empresa xxxxxxxxxxxxx.
 
 Isso ocorre porque, nessa modalidade de contrato, os valores relacionados ao plano são administrados e registrados pela própria empresa responsável pelo convênio, que possui acesso ao detalhamento das contribuições utilizadas para fins de declaração.
-Dessa forma, orientamos que entre em contato com a empresa/sindicato/órgão para solicitar o documento ou obter as orientações necessárias para emissão do demonstrativo.\`,
+Dessa forma, orientamos que entre em contato com a empresa/sindicato/órgão para solicitar o documento ou obter as orientações necessárias para emissão do demonstrativo.`,
 
 
 
-
-
-    alteracaoPlano: \`Título: ODONTOGROUP - ALTERAÇÃO DE PLANO
+    alteracaoPlano: `Título: ODONTOGROUP - ALTERAÇÃO DE PLANO
 
 {gender} {name}, {greeting}!
 
@@ -280,17 +276,17 @@ Acusamos o recebimento da sua solicitação por meio do protocolo de n.º {proto
 
 Esclarecemos que, a partir do primeiro dia do mês seguinte, a alteração estará vigente em seu cadastro e o plano poderá ser utilizado normalmente, conforme as regras e diretrizes do seu plano odontológico.
 
-Reforçamos que é possível realizar o upgrade para qualquer um de nossos planos odontológicos a qualquer momento, de forma simples e sem a necessidade de aguardar um prazo específico. Entretanto, para realizar a regressão para um plano de menor valor (downgrade), é necessário observar o prazo mínimo de 12 meses a partir da última alteração contratual.\`,
+Reforçamos que é possível realizar o upgrade para qualquer um de nossos planos odontológicos a qualquer momento, de forma simples e sem a necessidade de aguardar um prazo específico. Entretanto, para realizar a regressão para um plano de menor valor (downgrade), é necessário observar o prazo mínimo de 12 meses a partir da última alteração contratual.`,
 
-    contratoNovo: \`Título: ODONTOGROUP - INFORMAÇÕES SOBRE O PLANO
+    contratoNovo: `Título: ODONTOGROUP - INFORMAÇÕES SOBRE O PLANO
 
 {gender} {name}, {greeting}!
 
 Acusamos o recebimento da sua solicitação por meio do protocolo de n.º {protocol} e informamos que o início de vigência do seu plano está previsto para o dia XXXXX. A partir desta data, o acesso ao aplicativo estará liberado, permitindo a consulta detalhada dos serviços contratados, bem como demais funcionalidades disponíveis para o seu plano.
 
-Adicionalmente, informamos que, em breve, nossa equipe de boas-vindas entrará em contato para confirmar os seus dados cadastrais e fornecer todas as orientações necessárias sobre os benefícios contratados, garantindo que você aproveite ao máximo tudo o que o plano oferece.\`,
+Adicionalmente, informamos que, em breve, nossa equipe de boas-vindas entrará em contato para confirmar os seus dados cadastrais e fornecer todas as orientações necessárias sobre os benefícios contratados, garantindo que você aproveite ao máximo tudo o que o plano oferece.`,
 
-    solicitaCancelamento: \`Título: ODONTOGROUP - SOLICITAÇÃO DE CANCELAMENTO
+    solicitaCancelamento: `Título: ODONTOGROUP - SOLICITAÇÃO DE CANCELAMENTO
 
 {gender} {name}, {greeting}!
 
@@ -302,9 +298,9 @@ Antecipamos que o plano possui uma vigência mínima de 12 meses, portanto {mult
 
 {mensalidade}
 
-Caso seja de seu interesse, podemos encaminhar um boleto bancário com vencimento em até 5 dias a contar da data de hoje, ou, alternativamente, realizar uma nova tentativa de cobrança no cartão de crédito previamente cadastrado. Se preferir efetuar o pagamento utilizando outro cartão de crédito, também podemos encaminhar um link de pagamento para que a transação seja realizada de forma rápida e segura.\`,
+Caso seja de seu interesse, podemos encaminhar um boleto bancário com vencimento em até 5 dias a contar da data de hoje, ou, alternativamente, realizar uma nova tentativa de cobrança no cartão de crédito previamente cadastrado. Se preferir efetuar o pagamento utilizando outro cartão de crédito, também podemos encaminhar um link de pagamento para que a transação seja realizada de forma rápida e segura.`,
 
-    coberturaTomo: \`Título: ODONTOGROUP - COBERTURA DO PLANO
+    coberturaTomo: `Título: ODONTOGROUP - COBERTURA DO PLANO
 
 {gender} {name}, {greeting}!
 
@@ -317,10 +313,10 @@ Para consultar a relação completa de procedimentos cobertos, orientamos que re
 Aplicativo:
 Página inicial > último ícone no canto inferior direito da tela > Meu Plano > Cobertura.
 Site:
-Acesse: [https://odontogroup.s4e.com.br/sys/?TipoUsuario=1](https://odontogroup.s4e.com.br/sys/?TipoUsuario=1)
-Em seguida: insira seu CPF e senha (a mesma utilizada no aplicativo) > Portal de Informações > Cobertura/Carência.\`,
+Acesse: https://odontogroup.s4e.com.br/sys/?TipoUsuario=1
+Em seguida: insira seu CPF e senha (a mesma utilizada no aplicativo) > Portal de Informações > Cobertura/Carência.`,
 
-    inclusaoDepGDFC: \`Título: ODONTOGROUP - INCLUSÃO DE DEPENDENTES
+    inclusaoDepGDFC: `Título: ODONTOGROUP - INCLUSÃO DE DEPENDENTES
 
 {gender} {name}, {greeting}!
 
@@ -362,9 +358,9 @@ Abrangência Dependente: AL, DF, GO, PE e TO.
 Caso deseje prosseguir com a inclusão, por gentileza, preencha corretamente o formulário de inclusão de dependentes que segue em anexo.
 
 Destacamos que novas inclusões de dependentes em planos já ativos, tem seu início de vigência sempre para o mês seguinte.
-Reforçamos que todos os planos ofertados possuem a vigência padrão de 12 meses, sendo necessário permanecer ativo durante o período de vigência. Após os 12 meses, caso possua interesse em cancelar o plano, é necessário entrar em contato conosco.\`,
+Reforçamos que todos os planos ofertados possuem a vigência padrão de 12 meses, sendo necessário permanecer ativo durante o período de vigência. Após os 12 meses, caso possua interesse em cancelar o plano, é necessário entrar em contato conosco.`,
 
-    envioToken: \`Título: ODONTOGROUP - ENVIO DE TOKEN
+    envioToken: `Título: ODONTOGROUP - ENVIO DE TOKEN
 
 {gender} {name}, {greeting}!
 
@@ -374,17 +370,17 @@ XXXXXXXXXXXX
 
 Orientamos que o procedimento seja realizado dentro do prazo de validade do token, a fim de garantir o cadastro em tempo hábil.
 
-Ressaltamos que o cartão de crédito informado deve, obrigatoriamente, estar em nome do atual responsável financeiro do contrato, em conformidade com as cláusulas contratuais e com a LGPD.\`,
+Ressaltamos que o cartão de crédito informado deve, obrigatoriamente, estar em nome do atual responsável financeiro do contrato, em conformidade com as cláusulas contratuais e com a LGPD.`,
 
-    envioProtocolo: \`Título: ODONTOGROUP - ENVIO DE PROTOCOLO
+    envioProtocolo: `Título: ODONTOGROUP - ENVIO DE PROTOCOLO
 
 {gender} {name}, {greeting}!
 
 Em atendimento à sua solicitação, informamos que o número de protocolo referente ao seu atendimento é nº {protocol}.
 
-Salientamos que este número deve ser utilizado como referência em eventuais contatos futuros, possibilitando maior agilidade na localização e acompanhamento da sua solicitação.\`,
+Salientamos que este número deve ser utilizado como referência em eventuais contatos futuros, possibilitando maior agilidade na localização e acompanhamento da sua solicitação.`,
 
-    posVendas: \`Título: ODONTOGROUP - BOAS-VINDAS PÓS-VENDAS
+    posVendas: `Título: ODONTOGROUP - BOAS-VINDAS PÓS-VENDAS
 
 {gender} {name}, {greeting}!
 
@@ -396,12 +392,12 @@ Informamos que tentamos contato por telefone, por meio do número xxxxxxxxxxxx, 
  
 Anexamos a este e-mail o Guia de Leitura Contratual, que contém todas as informações importantes sobre o plano contratado, incluindo:
  
-\- Detalhamento da cobertura do seu plano;
-\- Vigência contratual de 12 meses;
-\- Cláusula de multa rescisória de 20% sobre as parcelas vincendas, conforme estipulado em contrato; Renovação automática.
-\- Informações sobre os prazos de carência, contados a partir de:
+- Detalhamento da cobertura do seu plano;
+- Vigência contratual de 12 meses;
+- Cláusula de multa rescisória de 20% sobre as parcelas vincendas, conforme estipulado em contrato; Renovação automática.
+- Informações sobre os prazos de carência, contados a partir de:
  
-Protocolo de atendimento: {protocol}.\`
+Protocolo de atendimento: {protocol}.`
   };
 
   function togglePhoneField() {
@@ -462,7 +458,7 @@ Protocolo de atendimento: {protocol}.\`
 
   function generateText() {
     let name = document.getElementById("name").value.trim();
-    const genderInput = document.querySelector('input[name="gender"]\:checked');
+    const genderInput = document.querySelector('input[name="gender"]:checked');
     const gender = genderInput ? genderInput.value : '';
     const protocol = document.getElementById("protocol").value.trim();
     const purpose = document.getElementById("purpose").value;
@@ -471,31 +467,31 @@ Protocolo de atendimento: {protocol}.\`
     const phone = document.getElementById("phoneContact").value.trim();
 
     if (purpose !== 'semCPF' && (!name || !gender || !protocol || !purpose)) {
-      resultElement.innerHTML = '\<span style="color\:rgba(255,100,100,0.8)">⚠ Preencha todos os campos obrigatórios.\</span>';
+      resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Preencha todos os campos obrigatórios.</span>';
       return;
     }
     if (!purpose) {
-      resultElement.innerHTML = '\<span style="color\:rgba(255,100,100,0.8)">⚠ Selecione uma finalidade.\</span>';
+      resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Selecione uma finalidade.</span>';
       return;
     }
     if (purpose === 'tentativaContato' && !phone) {
-      resultElement.innerHTML = '\<span style="color\:rgba(255,100,100,0.8)">⚠ Informe o telefone cadastrado.\</span>';
+      resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Informe o telefone cadastrado.</span>';
       return;
     }
     if (purpose === 'solicitaCancelamento') {
-      const vigencia = document.querySelector('input[name="vigencia"]\:checked');
-      const mensalidade = document.querySelector('input[name="mensalidade"]\:checked');
+      const vigencia = document.querySelector('input[name="vigencia"]:checked');
+      const mensalidade = document.querySelector('input[name="mensalidade"]:checked');
       if (!vigencia || !mensalidade) {
-        resultElement.innerHTML = '\<span style="color\:rgba(255,100,100,0.8)">⚠ Selecione as opções de vigência e mensalidades.\</span>';
+        resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Selecione as opções de vigência e mensalidades.</span>';
         return;
       }
       if (mensalidade.value === 'nao' && !document.getElementById("mesMensalidade").value.trim()) {
-        resultElement.innerHTML = '\<span style="color\:rgba(255,100,100,0.8)">⚠ Informe o mês da última mensalidade devida.\</span>';
+        resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Informe o mês da última mensalidade devida.</span>';
         return;
       }
     }
     if (purpose !== 'semCPF' && !/^[0-9]+$/.test(protocol)) {
-      resultElement.innerHTML = '\<span style="color\:rgba(255,100,100,0.8)">⚠ O campo Protocolo deve conter apenas números.\</span>';
+      resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ O campo Protocolo deve conter apenas números.</span>';
       return;
     }
 
@@ -525,7 +521,7 @@ Protocolo de atendimento: {protocol}.\`
     const agendClinica = document.getElementById("agendClinica") ? document.getElementById("agendClinica").value.trim() : '';
 
     if (purpose === 'agendamento' && (!agendEspecialidade || !agendDataHora || !agendClinica)) {
-      resultElement.innerHTML = '\<span style="color\:rgba(255,100,100,0.8)">⚠ Preencha a especialidade, data/hora e as informações da clínica.\</span>';
+      resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Preencha a especialidade, data/hora e as informações da clínica.</span>';
       return;
     }
 
@@ -542,8 +538,8 @@ Protocolo de atendimento: {protocol}.\`
       .replace(/{agendClinica}/g, agendClinica);
 
     if (purpose === 'solicitaCancelamento') {
-      const vigencia = document.querySelector('input[name="vigencia"]\:checked').value;
-      const mensalidade = document.querySelector('input[name="mensalidade"]\:checked').value;
+      const vigencia = document.querySelector('input[name="vigencia"]:checked').value;
+      const mensalidade = document.querySelector('input[name="mensalidade"]:checked').value;
       const mesMensalidade = document.getElementById("mesMensalidade").value.trim();
 
       const multaTexto = vigencia === 'sim'
@@ -552,15 +548,98 @@ Protocolo de atendimento: {protocol}.\`
 
       const mensalidadeTexto = mensalidade === 'sim'
         ? 'Reforçamos que o seu contrato possui mensalidades em aberto, portanto orientamos que entre em contato com a nossa central de atendimento, caso seja do seu interesse.'
-        : \`Reforçamos que o seu contrato não possui mensalidades em aberto, sendo a última mensalidade devida referente ao mês ${mesMensalidade}.\`;
+        : `Reforçamos que o seu contrato não possui mensalidades em aberto, sendo a última mensalidade devida referente ao mês ${mesMensalidade}.`;
 
       text = text
         .replace(/{multa}/g, multaTexto)
         .replace(/{mensalidade}/g, mensalidadeTexto);
     }
 
-    text = text.replace(/\n/g, '\<br>');
+    text = text.replace(/\n/g, '<br>');
     resultElement.innerHTML = text;
+  }
+
+  // ─── Redes de Atendimento ───
+  const redesData = {
+    PR: {
+      siso: [
+        {
+          nome: "CONSULTÓRIO DRA. ISABELA VAZQUEZ - ODONTOLOGIA E HARMONIZAÇÃO FACIAL",
+          endereco: "RUA ALAGOAS, 792 - SALA 1202",
+          bairro: "CENTRO",
+          cep: "86010-520",
+          municipio: "LONDRINA",
+          uf: "PARANÁ",
+          celular: "(43)99138.1938",
+          horarios: "Segunda a sexta 9h às 12h e de 14h às 19h"
+        },
+        {
+          nome: "EDIOGENES SIDRONIO DA SILVA JUNIOR",
+          endereco: "RUA SENADOR SOUZA NAVES, 275 - SALA 104",
+          bairro: "CENTRO",
+          cep: "86010-160",
+          municipio: "LONDRINA",
+          uf: "PARANÁ",
+          celular: "(43)99975.8638"
+        },
+        {
+          nome: "JULIANA MORTATI DE MARTIN",
+          endereco: "RUA PARA, 1122 - SALA 63 EDIFÍCIO COMERCIAL OURO VERDE",
+          bairro: "CENTRO",
+          cep: "86010-450",
+          municipio: "LONDRINA",
+          uf: "PARANÁ",
+          celular: "(43)99162.7971"
+        }
+      ]
+    },
+    DF: {
+      bruxismo: [
+        {
+          nome: "ORALUS",
+          endereco: "SCS QUADRA 6 BLOCO A LOTE 110 - ED ARNALDO VILHARES",
+          bairro: "ASA SUL",
+          cep: "70324-900",
+          municipio: "BRASÍLIA",
+          uf: "DISTRITO FEDERAL",
+          telefone: "(61)3037.8007",
+          celular: "(61)98130.0924"
+        }
+      ]
+    }
+  };
+
+  function consultarRede() {
+    const uf = document.getElementById("redeUF").value;
+    const proc = document.getElementById("redeProcedimento").value;
+    const el = document.getElementById("redeResultado");
+
+    if (!uf || !proc) {
+      el.innerHTML = '<div class="no-results"><div class="no-results-icon">🔍</div>Selecione o estado e o procedimento para consultar.</div>';
+      return;
+    }
+
+    const clinicas = redesData[uf] && redesData[uf][proc] ? redesData[uf][proc] : [];
+
+    if (clinicas.length === 0) {
+      el.innerHTML = '<div class="no-results"><div class="no-results-icon">😔</div>Nenhum prestador encontrado para essa combinação no momento.</div>';
+      return;
+    }
+
+    const html = '<div class="clinic-list">' + clinicas.map(c => {
+      let rows = '';
+      rows += `<div class="clinic-info-row"><strong>Endereço:</strong>${c.endereco}</div>`;
+      rows += `<div class="clinic-info-row"><strong>Bairro:</strong>${c.bairro}</div>`;
+      rows += `<div class="clinic-info-row"><strong>CEP:</strong>${c.cep}</div>`;
+      rows += `<div class="clinic-info-row"><strong>Município:</strong>${c.municipio}</div>`;
+      rows += `<div class="clinic-info-row"><strong>UF:</strong>${c.uf}</div>`;
+      if (c.telefone) rows += `<div class="clinic-info-row"><strong>Telefone Fixo:</strong>${c.telefone}</div>`;
+      if (c.celular)  rows += `<div class="clinic-info-row"><strong>Celular:</strong>${c.celular}</div>`;
+      if (c.horarios) rows += `<div class="clinic-info-row"><strong>Horários:</strong>${c.horarios}</div>`;
+      return `<div class="clinic-card"><div class="clinic-name">${c.nome}</div><div class="clinic-info">${rows}</div></div>`;
+    }).join('') + '</div>';
+
+    el.innerHTML = html;
   }
 
   // ─── Planos ───
@@ -570,43 +649,43 @@ Protocolo de atendimento: {protocol}.\`
     let r = "";
 
     const planos = {
-      411630995: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, BA, DF, GO, MG, PE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.\<br>\<strong>Contratação:\</strong> Coletivo empresarial.",
-      702168992: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, BA, DF, GO, MG, PE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.\<br>\<strong>Contratação:\</strong> Coletivo empresarial.",
-      473269153: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.\<br>\<strong>Contratação:\</strong> Coletivo empresarial.",
-      468299128: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Orto Doc+Aparelho+Manutenção.\<br>\<strong>Contratação:\</strong> Coletivo empresarial.",
-      486254206: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Orto Doc+Aparelho.\<br>\<strong>Contratação:\</strong> Coletivo empresarial.",
-      486113202: "Nacional.\<br>\<strong>Abrangência:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Orto Doc+Aparelho+Manutenção+Prótese.\<br>\<strong>Contratação:\</strong> Coletivo empresarial.",
-      486114201: "Nacional.\<br>\<strong>Abrangência:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Com Prótese.\<br>\<strong>Contratação:\</strong> Coletivo empresarial.",
-      481366189: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RJ, RN, RS, SE, SP e TO.\<br>\<strong>Formação de preço:\</strong> Misto.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Emergência RN 59.\<br>\<strong>Contratação:\</strong> Coletivo empresarial.",
-      442562036: "Nacional.\<br>\<strong>Abrangência:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.\<br>\<strong>Contratação:\</strong> Coletivo empresarial.",
-      437337025: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> DF, GO, TO, PE, AL.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.\<br>\<strong>Contratação:\</strong> Coletivo empresarial.",
-      476630160: "Nome Comercial: Coletivo Adesão Bronze II.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Municipal.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> Brasília (DF).\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Franquia.\<br>\<strong>Rol:\</strong> Com Prótese.",
-      468297121: "Nome Comercial: Coletivo Adesão Mais II.B.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Grupo de Estados.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE, TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Doc+Aparelho+Manutenção.",
-      484268195: "Nome Comercial: Essencial Odonto Brasília CA.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Municipal.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> Brasília (DF).\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Co-participação.\<br>\<strong>Rol:\</strong> Mínimo ANS.",
-      471297148: "Nome Comercial: FR Clínico Por Adesão II.B (Single).\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Grupo de Estados.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE, TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Franquia.\<br>\<strong>Rol:\</strong> Mínimo ANS.",
-      496043232: "Nome Comercial: Master Especial Premium CA.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Nacional.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Orto Doc+Aparelho+Manutenção+Prótese+Clareamento+Implante.",
-      474865154: "Nome Comercial: Master Especial.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Nacional.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Co-participação.\<br>\<strong>Rol:\</strong> Doc Orto+Aparelho+Manutenção+Prótese+Clareamento.",
-      489270214: "Nome Comercial: Odonto Doc CA.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Nacional.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Orto Doc+Aparelho.",
-      489269211: "Nome Comercial: Odonto Doc Premium CA.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Nacional.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Orto Doc+Aparelho+Prótese.",
-      489285212: "Nome Comercial: Odonto Orto CA.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Nacional.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Orto Doc+Aparelho+Manutenção+Prótese.",
-      489327211: "Nome Comercial: Odonto Orto Premium CA.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Nacional.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Orto Doc+Aparelho+Manutenção+Prótese.",
-      481954183: "Nome Comercial: Odonto SOS CA.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Grupo de Estados.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RJ, RN, RS, SE, SP, TO.\<br>\<strong>Formação de preço:\</strong> Misto.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Emergência RN 59.",
-      467608124: "Nome Comercial: Odontoclínico Coletivo II.B.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Grupo de Estados.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE, TO.\<br>\<strong>Formação de preço:\</strong> Pré-Estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.",
-      442559036: "Nome Comercial: Odontoclínico Coletivo por Adesão.\<br>\<strong>Contratação:\</strong> Coletivo por Adesão.\<br>\<strong>Abrangência Geográfica:\</strong> Nacional.\<br>\<strong>Situação:\</strong> Ativo.\<br>\<strong>Atuação:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-Estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.",
-      442561038: "Nacional.\<br>\<strong>Abrangência:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Co-participação.\<br>\<strong>Rol:\</strong> Documentação orto+Aparelho+Manutenções.\<br>\<strong>Contratação:\</strong> Individual ou Familiar.",
-      411629991: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, BA, DF, GO, MG, PE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.\<br>\<strong>Contratação:\</strong> Individual ou familiar.",
-      473268155: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.\<br>\<strong>Contratação:\</strong> Individual ou familiar.",
-      468461133: "Municipal.\<br>\<strong>Abrangência:\</strong> Maceió (AL), Manaus (AM), Salvador (BA), Fortaleza (CE), Brasília (DF), Goiânia (GO).\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Orto Doc+Aparelho+Manutenção.\<br>\<strong>Contratação:\</strong> Individual ou familiar.",
-      484937200: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Doc orto+Aparelho.\<br>\<strong>Contratação:\</strong> Individual ou familiar.",
-      485957200: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.\<br>\<strong>Contratação:\</strong> Individual ou familiar.",
-      485502207: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Orto Doc+Aparelho+Manutenção+Clareamento.\<br>\<strong>Contratação:\</strong> Individual ou familiar.",
-      485086206: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Prótese+Placa oclusal.\<br>\<strong>Contratação:\</strong> Individual ou familiar.",
-      459559099: "Municipal.\<br>\<strong>Abrangência:\</strong> Brasília (DF), Goiânia (GO), Recife (PE) ou Maceió (AL).\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.\<br>\<strong>Contratação:\</strong> Individual ou familiar.",
-      442560030: "Nacional.\<br>\<strong>Abrangência:\</strong> Nacional.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Co-participação.\<br>\<strong>Rol:\</strong> Mínimo ANS.\<br>\<strong>Contratação:\</strong> Individual ou familiar.",
-      411631993: "Grupo de estados.\<br>\<strong>Abrangência:\</strong> AL, BA, DF, GO, MG, PE e TO.\<br>\<strong>Formação de preço:\</strong> Pré-estabelecido.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Mínimo ANS.\<br>\<strong>Contratação:\</strong> Individual ou familiar.",
-      496805231: "Nacional.\<br>\<strong>Nome Comercial:\</strong> Odonto Doc NA.\<br>\<strong>Abrangência:\</strong> Nacional.\<br>\<strong>Fator moderador:\</strong> Não tem.\<br>\<strong>Rol:\</strong> Instalação do Aparelho+Documentação.\<br>\<strong>Contratação:\</strong> Individual ou Familiar."
+      411630995: "Grupo de estados.<br><strong>Abrangência:</strong> AL, BA, DF, GO, MG, PE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      702168992: "Grupo de estados.<br><strong>Abrangência:</strong> AL, BA, DF, GO, MG, PE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      473269153: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      468299128: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      486254206: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      486113202: "Nacional.<br><strong>Abrangência:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção+Prótese.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      486114201: "Nacional.<br><strong>Abrangência:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Com Prótese.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      481366189: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RJ, RN, RS, SE, SP e TO.<br><strong>Formação de preço:</strong> Misto.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Emergência RN 59.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      442562036: "Nacional.<br><strong>Abrangência:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      437337025: "Grupo de estados.<br><strong>Abrangência:</strong> DF, GO, TO, PE, AL.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      476630160: "Nome Comercial: Coletivo Adesão Bronze II.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Municipal.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Brasília (DF).<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Franquia.<br><strong>Rol:</strong> Com Prótese.",
+      468297121: "Nome Comercial: Coletivo Adesão Mais II.B.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Grupo de Estados.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE, TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Doc+Aparelho+Manutenção.",
+      484268195: "Nome Comercial: Essencial Odonto Brasília CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Municipal.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Brasília (DF).<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Co-participação.<br><strong>Rol:</strong> Mínimo ANS.",
+      471297148: "Nome Comercial: FR Clínico Por Adesão II.B (Single).<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Grupo de Estados.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE, TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Franquia.<br><strong>Rol:</strong> Mínimo ANS.",
+      496043232: "Nome Comercial: Master Especial Premium CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção+Prótese+Clareamento+Implante.",
+      474865154: "Nome Comercial: Master Especial.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Co-participação.<br><strong>Rol:</strong> Doc Orto+Aparelho+Manutenção+Prótese+Clareamento.",
+      489270214: "Nome Comercial: Odonto Doc CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho.",
+      489269211: "Nome Comercial: Odonto Doc Premium CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Prótese.",
+      489285212: "Nome Comercial: Odonto Orto CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção+Prótese.",
+      489327211: "Nome Comercial: Odonto Orto Premium CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção+Prótese.",
+      481954183: "Nome Comercial: Odonto SOS CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Grupo de Estados.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RJ, RN, RS, SE, SP, TO.<br><strong>Formação de preço:</strong> Misto.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Emergência RN 59.",
+      467608124: "Nome Comercial: Odontoclínico Coletivo II.B.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Grupo de Estados.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE, TO.<br><strong>Formação de preço:</strong> Pré-Estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.",
+      442559036: "Nome Comercial: Odontoclínico Coletivo por Adesão.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-Estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.",
+      442561038: "Nacional.<br><strong>Abrangência:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Co-participação.<br><strong>Rol:</strong> Documentação orto+Aparelho+Manutenções.<br><strong>Contratação:</strong> Individual ou Familiar.",
+      411629991: "Grupo de estados.<br><strong>Abrangência:</strong> AL, BA, DF, GO, MG, PE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      473268155: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      468461133: "Municipal.<br><strong>Abrangência:</strong> Maceió (AL), Manaus (AM), Salvador (BA), Fortaleza (CE), Brasília (DF), Goiânia (GO).<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção.<br><strong>Contratação:</strong> Individual ou familiar.",
+      484937200: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Doc orto+Aparelho.<br><strong>Contratação:</strong> Individual ou familiar.",
+      485957200: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      485502207: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção+Clareamento.<br><strong>Contratação:</strong> Individual ou familiar.",
+      485086206: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Prótese+Placa oclusal.<br><strong>Contratação:</strong> Individual ou familiar.",
+      459559099: "Municipal.<br><strong>Abrangência:</strong> Brasília (DF), Goiânia (GO), Recife (PE) ou Maceió (AL).<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      442560030: "Nacional.<br><strong>Abrangência:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Co-participação.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      411631993: "Grupo de estados.<br><strong>Abrangência:</strong> AL, BA, DF, GO, MG, PE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      496805231: "Nacional.<br><strong>Nome Comercial:</strong> Odonto Doc NA.<br><strong>Abrangência:</strong> Nacional.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Instalação do Aparelho+Documentação.<br><strong>Contratação:</strong> Individual ou Familiar."
     };
 
-    r = planos[n] || '\<span style="color\:rgba(255,180,80,0.9)">⚠ Código não localizado. Revise-o e tente novamente.\</span>';
+    r = planos[n] || '<span style="color:rgba(255,180,80,0.9)">⚠ Código não localizado. Revise-o e tente novamente.</span>';
     document.getElementById("resultado").innerHTML = r;
   }
