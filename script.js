@@ -214,19 +214,16 @@ Acusamos o recebimento da sua solicitação e para que possamos localizar o seu 
 
 {gender} {name}, {greeting}!
 
-Em atenção à sua solicitação realizada através do protocolo de n.º {protocol}, segue em anexo o Formulário de Requisição de Reembolso. 
-
-Para que nossa operadora possa prosseguir com a análise do reembolso, solicitamos a leitura do formulário com atenção, devido às exigências quanto ao preenchimento de todos os campos existentes para andamento do processo de reembolso.
-
-Lembrando que, no formulário há campos referentes aos tratamentos odontológicos onde o profissional cirurgião-dentista deverá preencher, carimbar e assinar.
-
-Juntamente ao formulário de reembolso, é necessário encaminhar as radiografias anteriores e posteriores ao procedimento realizado.
-
-Solicitamos também que encaminhe, juntamente às documentações já mencionadas, a nota fiscal ou recibo de pagamento emitidos pelo Cirurgião-Dentista, com o valor correspondente aos tratamentos descritos no formulário, além do comprovante de pagamento bancário.
-
-Esclarecemos que o comprovante de pagamento referido pode ser a via emitida pela máquina no caso de pagamento via cartão, um print do desconto em seu aplicativo bancário ou comprovante de transferência no caso de pagamento por PIX ou transferência bancária.
-
-Ao realizar o envio da documentação completa e análise da solicitação pela Operadora, sendo essa aprovada, o pagamento do reembolso será em até 30 dias.`,
+Em atenção à sua solicitação realizada sob protocolo n.º{protocol}, informamos que conforme as diretrizes contratuais, o reembolso é realizado de forma tabelada, ou seja, de acordo com o valor disposto na tabela de reembolso do seu plano, informo que essa tabela está disponível pelo portal SEBRAE.
+Ressaltamos que o tratamento deve estar compreendido na cobertura do seu plano odontológico para que seja possível reembolsar.
+Documentação necessária para análise:
+Formulário de Requisição de Reembolso (FRR), o mesmo é enviado pela operadora, e deve ser devolvido devidamente preenchido em todos os campos, com a seção médica assinada e carimbada pelo cirurgião-dentista responsável;
+Documentação radiográfica (pré e pós-operatória);
+Nota fiscal ou recibo original, emitido pelo profissional executante, com discriminação dos valores;
+Comprovante de pagamento (comprovante de cartão, extrato bancário ou comprovante de transferência/PIX).
+Processamento:
+O prazo para análise e eventual liberação do reembolso será de até 30 dias úteis contados a partir da recepção de toda a documentação em conformidade com os requisitos.
+Ressaltamos que a incompletude documental ou irregularidades nos comprovantes implicarão na suspensão do processo até a devida regularização.`,
 
     boleto: `Título: ODONTOGROUP - BOLETO
 
@@ -316,7 +313,7 @@ Site:
 Acesse: https://odontogroup.s4e.com.br/sys/?TipoUsuario=1
 Em seguida: insira seu CPF e senha (a mesma utilizada no aplicativo) > Portal de Informações > Cobertura/Carência.`,
 
-    inclusaoDepGDFC: `Título: ODONTOGROUP - INCLUSÃO DE DEPENDENTES
+    inclusaoDepGDFC: `Título: ODONTOGROUP - INCLUSÃO DE DEPENDENTES GDF
 
 {gender} {name}, {greeting}!
 
