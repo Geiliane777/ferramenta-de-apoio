@@ -22,7 +22,7 @@
   function syncAndToggle(src) {
     const other = document.getElementById(src.id === 'toggleModeBtn' ? 'toggleModeBtn2' : 'toggleModeBtn');
     if (other) other.checked = src.checked;
-    document.body.classList.toggle('light-mode', src.checked);
+    document.body.classList.toggle('dark-mode', src.checked);
   }
 
   // ─── Copy ───
@@ -34,8 +34,8 @@
     function mostrarSucesso() {
       const orig = btn.innerHTML;
       btn.innerHTML = '✓ Copiado!';
-      btn.style.color = 'var(--teal)';
-      btn.style.borderColor = 'var(--teal)';
+      btn.style.color = 'var(--azul)';
+      btn.style.borderColor = 'var(--azul)';
       setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; btn.style.borderColor = ''; }, 1800);
     }
 
@@ -68,11 +68,11 @@
     const totalMesesContrato = 13;
 
     if (isNaN(valorMensalidade) || valorMensalidade <= 0 || isNaN(mesesFaltantes) || mesesFaltantes < 0) {
-      resultadoEl.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Insira valores válidos.</span>';
+      resultadoEl.innerHTML = '<span style="color:var(--vermelho)">⚠ Insira valores válidos.</span>';
       return;
     }
     if (mesesFaltantes > totalMesesContrato) {
-      resultadoEl.innerHTML = `<span style="color:rgba(255,100,100,0.8)">⚠ Os meses faltantes não podem exceder ${totalMesesContrato}.</span>`;
+      resultadoEl.innerHTML = `<span style="color:var(--vermelho)">⚠ Os meses faltantes não podem exceder ${totalMesesContrato}.</span>`;
       return;
     }
 
@@ -107,7 +107,7 @@
     const resultadoElement = document.getElementById("resultadoProporcional");
 
     if (isNaN(valorTotal) || valorTotal <= 0 || isNaN(dias) || dias <= 0 || dias > 31) {
-      resultadoElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Insira valores válidos (dias entre 1 e 31).</span>';
+      resultadoElement.innerHTML = '<span style="color:var(--vermelho)">⚠ Insira valores válidos (dias entre 1 e 31).</span>';
       return;
     }
 
@@ -265,15 +265,13 @@ Dessa forma, orientamos que entre em contato com a empresa/sindicato/órgão par
 
 
 
-    alteracaoPlano: `Título: ODONTOGROUP - ALTERAÇÃO DE PLANO
+    alteracaoPlano: `Título: ODONTOGROUP - INCLUSÃO GDF
 
 {gender} {name}, {greeting}!
 
 Acusamos o recebimento da sua solicitação por meio do protocolo de n.º {protocol} e informamos que a documentação encaminhada foi devidamente direcionada ao setor responsável para análise e finalização do processo.
 
-Esclarecemos que, a partir do primeiro dia do mês seguinte, a alteração estará vigente em seu cadastro e o plano poderá ser utilizado normalmente, conforme as regras e diretrizes do seu plano odontológico.
-
-Reforçamos que é possível realizar o upgrade para qualquer um de nossos planos odontológicos a qualquer momento, de forma simples e sem a necessidade de aguardar um prazo específico. Entretanto, para realizar a regressão para um plano de menor valor (downgrade), é necessário observar o prazo mínimo de 12 meses a partir da última alteração contratual.`,
+Esclarecemos que, a partir do primeiro dia do mês seguinte, a inclusão estará vigente em seu cadastro e o plano poderá ser utilizado normalmente, conforme as regras e diretrizes do seu plano odontológico.`,
 
     contratoNovo: `Título: ODONTOGROUP - INFORMAÇÕES SOBRE O PLANO
 
@@ -464,31 +462,31 @@ Protocolo de atendimento: {protocol}.`
     const phone = document.getElementById("phoneContact").value.trim();
 
     if (purpose !== 'semCPF' && (!name || !gender || !protocol || !purpose)) {
-      resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Preencha todos os campos obrigatórios.</span>';
+      resultElement.innerHTML = '<span style="color:var(--vermelho)">⚠ Preencha todos os campos obrigatórios.</span>';
       return;
     }
     if (!purpose) {
-      resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Selecione uma finalidade.</span>';
+      resultElement.innerHTML = '<span style="color:var(--vermelho)">⚠ Selecione uma finalidade.</span>';
       return;
     }
     if (purpose === 'tentativaContato' && !phone) {
-      resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Informe o telefone cadastrado.</span>';
+      resultElement.innerHTML = '<span style="color:var(--vermelho)">⚠ Informe o telefone cadastrado.</span>';
       return;
     }
     if (purpose === 'solicitaCancelamento') {
       const vigencia = document.querySelector('input[name="vigencia"]:checked');
       const mensalidade = document.querySelector('input[name="mensalidade"]:checked');
       if (!vigencia || !mensalidade) {
-        resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Selecione as opções de vigência e mensalidades.</span>';
+        resultElement.innerHTML = '<span style="color:var(--vermelho)">⚠ Selecione as opções de vigência e mensalidades.</span>';
         return;
       }
       if (mensalidade.value === 'nao' && !document.getElementById("mesMensalidade").value.trim()) {
-        resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Informe o mês da última mensalidade devida.</span>';
+        resultElement.innerHTML = '<span style="color:var(--vermelho)">⚠ Informe o mês da última mensalidade devida.</span>';
         return;
       }
     }
     if (purpose !== 'semCPF' && !/^[0-9]+$/.test(protocol)) {
-      resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ O campo Protocolo deve conter apenas números.</span>';
+      resultElement.innerHTML = '<span style="color:var(--vermelho)">⚠ O campo Protocolo deve conter apenas números.</span>';
       return;
     }
 
@@ -518,7 +516,7 @@ Protocolo de atendimento: {protocol}.`
     const agendClinica = document.getElementById("agendClinica") ? document.getElementById("agendClinica").value.trim() : '';
 
     if (purpose === 'agendamento' && (!agendEspecialidade || !agendDataHora || !agendClinica)) {
-      resultElement.innerHTML = '<span style="color:rgba(255,100,100,0.8)">⚠ Preencha a especialidade, data/hora e as informações da clínica.</span>';
+      resultElement.innerHTML = '<span style="color:var(--vermelho)">⚠ Preencha a especialidade, data/hora e as informações da clínica.</span>';
       return;
     }
 
@@ -599,6 +597,6 @@ Protocolo de atendimento: {protocol}.`
       496805231: "Nacional.<br><strong>Nome Comercial:</strong> Odonto Doc NA.<br><strong>Abrangência:</strong> Nacional.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Instalação do Aparelho+Documentação.<br><strong>Contratação:</strong> Individual ou Familiar."
     };
 
-    r = planos[n] || '<span style="color:rgba(255,180,80,0.9)">⚠ Código não localizado. Revise-o e tente novamente.</span>';
+    r = planos[n] || '<span style="color:var(--vermelho)">⚠ Código não localizado. Revise-o e tente novamente.</span>';
     document.getElementById("resultado").innerHTML = r;
   }
