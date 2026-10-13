@@ -405,15 +405,25 @@ Protocolo de atendimento: {protocol}.`
     const supabase = await supabaseClientPromise;
     const { data, error } = await supabase
       .from('text_templates')
-      .select('template_key, content');
+      .select('template_key, label, content');
 
     if (error) {
       console.error('Could not load saved templates', error);
       return;
     }
 
+    const purposeSelect = document.getElementById('purpose');
+
     data.forEach(template => {
-      if (Object.prototype.hasOwnProperty.call(texts, template.template_key)) {
+      if (!Object.prototype.hasOwnProperty.call(texts, template.template_key)) {
+        texts[template.template_key] = template.content;
+        if (purposeSelect && !purposeSelect.querySelector(`option[value="${template.template_key}"]`)) {
+          const opt = document.createElement('option');
+          opt.value = template.template_key;
+          opt.textContent = template.label;
+          purposeSelect.appendChild(opt);
+        }
+      } else {
         texts[template.template_key] = template.content;
       }
     });
@@ -457,9 +467,21 @@ Protocolo de atendimento: {protocol}.`
       const group = document.createElement('div');
       group.className = 'template-editor-item';
 
+      const header = document.createElement('div');
+      header.className = 'template-editor-header';
+
       const label = document.createElement('label');
       label.setAttribute('for', `template-${key}`);
       label.textContent = templateLabel(key);
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.type = 'button';
+      deleteBtn.className = 'btn-delete-template';
+      deleteBtn.textContent = 'Excluir';
+      deleteBtn.dataset.templateKey = key;
+      deleteBtn.onclick = () => deleteTemplate(key);
+
+      header.append(label, deleteBtn);
 
       const textarea = document.createElement('textarea');
       textarea.id = `template-${key}`;
@@ -467,7 +489,7 @@ Protocolo de atendimento: {protocol}.`
       textarea.rows = 8;
       textarea.value = texts[key];
 
-      group.append(label, textarea);
+      group.append(header, textarea);
       list.appendChild(group);
     });
   }
@@ -547,6 +569,63 @@ Protocolo de atendimento: {protocol}.`
 
     rows.forEach(row => { texts[row.template_key] = row.content; });
     showAdminMessage('adminSaveMessage', 'Alterações salvas com sucesso.', 'success');
+  }
+
+  function slugifyLabel(label) {
+    const slug = label.trim().toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+    return 'custom_' + (slug || 'modelo') + '_' + Date.now().toString(36);
+  }
+
+  function addNewTemplate() {
+    const labelInput = document.getElementById('newTemplateLabel');
+    const contentInput = document.getElementById('newTemplateContent');
+    const label = labelInput.value.trim();
+    const content = contentInput.value.trim();
+
+    if (!label || !content) {
+      showAdminMessage('adminSaveMessage', 'Preencha o nome e o texto da nova mensagem.', 'error');
+      return;
+    }
+
+    const key = slugifyLabel(label);
+    texts[key] = content;
+
+    const purposeSelect = document.getElementById('purpose');
+    if (!purposeSelect.querySelector(`option[value="${key}"]`)) {
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = label;
+      purposeSelect.appendChild(opt);
+    }
+
+    labelInput.value = '';
+    contentInput.value = '';
+    renderTemplateEditor();
+    showAdminMessage('adminSaveMessage', 'Nova mensagem adicionada. Clique em "Salvar alterações" para confirmar.', 'success');
+  }
+
+  async function deleteTemplate(key) {
+    const supabase = await supabaseClientPromise;
+    const { error } = await supabase
+      .from('text_templates')
+      .delete()
+      .eq('template_key', key);
+
+    if (error) {
+      showAdminMessage('adminSaveMessage', 'Não foi possível excluir a mensagem.', 'error');
+      return;
+    }
+
+    delete texts[key];
+
+    const opt = document.querySelector(`#purpose option[value="${key}"]`);
+    if (opt) opt.remove();
+
+    renderTemplateEditor();
+    showAdminMessage('adminSaveMessage', 'Mensagem excluída.', 'success');
   }
 
   async function signOutAdmin() {

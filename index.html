@@ -356,6 +356,20 @@
         <button class="btn-ghost" type="button" onclick="signOutAdmin()">Sair</button>
       </div>
       <div id="templateEditorList" class="template-editor-list"></div>
+
+      <div class="admin-add-template">
+        <h3 class="admin-subheading">Adicionar nova mensagem</h3>
+        <div class="form-group">
+          <label for="newTemplateLabel">Nome da finalidade (ex: Segunda via de boleto)</label>
+          <input type="text" id="newTemplateLabel" placeholder="Nome que aparecerá na lista de finalidades">
+        </div>
+        <div class="form-group">
+          <label for="newTemplateContent">Texto da mensagem</label>
+          <textarea id="newTemplateContent" rows="6" placeholder="Escreva a mensagem aqui. Use {name}, {protocol}, {gender}, {greeting}, {phone} para personalizar."></textarea>
+        </div>
+        <button class="btn-ghost" type="button" onclick="addNewTemplate()">+ Adicionar mensagem</button>
+      </div>
+
       <div id="adminSaveMessage" class="admin-message" role="status"></div>
       <button class="btn" type="button" onclick="saveTemplates()">Salvar alterações</button>
     </div>
