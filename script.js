@@ -1,3 +1,9 @@
+  const SUPABASE_URL = 'https://0ec90b57d6e95fcbda19832f.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJib2x0IiwicmVmIjoiMGVjOTBiNTdkNmU5NWZjYmRhMTk4MzJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODE1NzQsImV4cCI6MTc1ODg4MTU3NH0.9I8-U0x86Ak8t2DGaIk0HfvTSLsAyzdnz-Nw00mMkKw';
+  const supabaseClientPromise = import('https://esm.sh/@supabase/supabase-js@2').then(({ createClient }) =>
+    createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  );
+
   // ─── Navigation ───
   function showSection(sectionId, el) {
     document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -150,7 +156,7 @@
   }
 
   // ─── Texts ───
-  const texts = {
+  let texts = {
     tentativaContato: `Título: ODONTOGROUP - TENTATIVA DE CONTATO
 
 {gender} {name}, {greeting}!
@@ -395,6 +401,168 @@ Anexamos a este e-mail o Guia de Leitura Contratual, que contém todas as inform
 Protocolo de atendimento: {protocol}.`
   };
 
+  async function loadSavedTemplates() {
+    const supabase = await supabaseClientPromise;
+    const { data, error } = await supabase
+      .from('text_templates')
+      .select('template_key, content');
+
+    if (error) {
+      console.error('Could not load saved templates', error);
+      return;
+    }
+
+    data.forEach(template => {
+      if (Object.prototype.hasOwnProperty.call(texts, template.template_key)) {
+        texts[template.template_key] = template.content;
+      }
+    });
+  }
+
+  async function checkAdminSession() {
+    const supabase = await supabaseClientPromise;
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return false;
+
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('user_id')
+      .eq('user_id', session.user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Could not check admin access', error);
+      return false;
+    }
+
+    return Boolean(data);
+  }
+
+  function showAdminMessage(id, message, type = '') {
+    const element = document.getElementById(id);
+    element.textContent = message;
+    element.className = `admin-message ${type}`;
+  }
+
+  function templateLabel(key) {
+    const option = document.querySelector(`#purpose option[value="${key}"]`);
+    return option ? option.textContent : key;
+  }
+
+  function renderTemplateEditor() {
+    const list = document.getElementById('templateEditorList');
+    list.replaceChildren();
+
+    Object.keys(texts).forEach(key => {
+      const group = document.createElement('div');
+      group.className = 'template-editor-item';
+
+      const label = document.createElement('label');
+      label.setAttribute('for', `template-${key}`);
+      label.textContent = templateLabel(key);
+
+      const textarea = document.createElement('textarea');
+      textarea.id = `template-${key}`;
+      textarea.dataset.templateKey = key;
+      textarea.rows = 8;
+      textarea.value = texts[key];
+
+      group.append(label, textarea);
+      list.appendChild(group);
+    });
+  }
+
+  function setAdminView(isAdmin) {
+    document.getElementById('adminLoginCard').hidden = isAdmin;
+    document.getElementById('adminEditorCard').hidden = !isAdmin;
+    if (isAdmin) renderTemplateEditor();
+  }
+
+  async function handleAdminLogin(event) {
+    event.preventDefault();
+    showAdminMessage('adminAuthMessage', 'Entrando...');
+
+    const email = document.getElementById('adminEmail').value.trim();
+    const password = document.getElementById('adminPassword').value;
+    const supabase = await supabaseClientPromise;
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error || !(await checkAdminSession())) {
+      showAdminMessage('adminAuthMessage', 'Não foi possível entrar com essa conta.', 'error');
+      return;
+    }
+
+    showAdminMessage('adminAuthMessage', '');
+    setAdminView(true);
+  }
+
+  async function createAdminAccount() {
+    showAdminMessage('adminAuthMessage', 'Criando acesso...');
+
+    const email = document.getElementById('adminEmail').value.trim();
+    const password = document.getElementById('adminPassword').value;
+    const supabase = await supabaseClientPromise;
+    const { data, error } = await supabase.auth.signUp({ email, password });
+
+    if (error || !data.user) {
+      showAdminMessage('adminAuthMessage', 'Não foi possível criar o acesso. Confira os dados informados.', 'error');
+      return;
+    }
+
+    if (!data.session) {
+      showAdminMessage('adminAuthMessage', 'A conta foi criada. Verifique seu e-mail para concluir o acesso.', 'success');
+      return;
+    }
+
+    if (await checkAdminSession()) {
+      setAdminView(true);
+      showAdminMessage('adminSaveMessage', 'Acesso administrativo criado.', 'success');
+    } else {
+      showAdminMessage('adminAuthMessage', 'Esta conta não possui acesso administrativo.', 'error');
+    }
+  }
+
+  async function saveTemplates() {
+    const isAdmin = await checkAdminSession();
+    if (!isAdmin) {
+      setAdminView(false);
+      showAdminMessage('adminAuthMessage', 'Entre novamente para editar os textos.', 'error');
+      return;
+    }
+
+    const rows = [...document.querySelectorAll('#templateEditorList textarea')].map(textarea => ({
+      template_key: textarea.dataset.templateKey,
+      label: templateLabel(textarea.dataset.templateKey),
+      content: textarea.value
+    }));
+
+    const supabase = await supabaseClientPromise;
+    const { error } = await supabase.from('text_templates').upsert(rows, { onConflict: 'template_key' });
+
+    if (error) {
+      console.error('Could not save templates', error);
+      showAdminMessage('adminSaveMessage', 'Não foi possível salvar as alterações.', 'error');
+      return;
+    }
+
+    rows.forEach(row => { texts[row.template_key] = row.content; });
+    showAdminMessage('adminSaveMessage', 'Alterações salvas com sucesso.', 'success');
+  }
+
+  async function signOutAdmin() {
+    const supabase = await supabaseClientPromise;
+    await supabase.auth.signOut();
+    setAdminView(false);
+    showAdminMessage('adminAuthMessage', 'Você saiu da área administrativa.', 'success');
+  }
+
+  function initializeAdmin() {
+    document.getElementById('adminAuthForm').addEventListener('submit', handleAdminLogin);
+    loadSavedTemplates();
+    checkAdminSession().then(setAdminView);
+  }
+
+  // ─── Text editor and admin access ───
   function togglePhoneField() {
     const purpose = document.getElementById("purpose").value;
     const phoneGroup = document.getElementById("phoneGroup");
@@ -600,3 +768,5 @@ Protocolo de atendimento: {protocol}.`
     r = planos[n] || '<span style="color:var(--vermelho)">⚠ Código não localizado. Revise-o e tente novamente.</span>';
     document.getElementById("resultado").innerHTML = r;
   }
+
+  document.addEventListener('DOMContentLoaded', initializeAdmin);

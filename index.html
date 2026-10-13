@@ -64,6 +64,13 @@
       <div class="nav-icon">🏥</div>
       Redes credenciadas
     </a>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="nav-item" onclick="showSection('admin', this)">
+      <div class="nav-icon">⚙</div>
+      Administração
+    </div>
   </nav>
 
   <div class="sidebar-footer">
@@ -306,6 +313,48 @@
           <span id="resultado">Digite o código do produto para consultar.</span>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Administração -->
+  <div id="admin" class="content-section">
+    <div class="page-header">
+      <h1 class="page-title">Administração</h1>
+      <p class="page-subtitle">Atualize os textos que aparecem no gerador sem alterar a página.</p>
+    </div>
+
+    <div class="card admin-card" id="adminLoginCard">
+      <div class="admin-lock-icon">⚙</div>
+      <h2 class="admin-heading">Acesso administrativo</h2>
+      <p class="admin-description">Entre com sua conta para editar as mensagens compartilhadas.</p>
+      <form id="adminAuthForm" class="admin-form">
+        <div class="form-group">
+          <label for="adminEmail">E-mail</label>
+          <input type="email" id="adminEmail" autocomplete="email" required>
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Senha</label>
+          <input type="password" id="adminPassword" autocomplete="current-password" minlength="6" required>
+        </div>
+        <div id="adminAuthMessage" class="admin-message" role="status"></div>
+        <div class="admin-form-actions">
+          <button class="btn" type="submit">Entrar</button>
+          <button class="btn-ghost" type="button" onclick="createAdminAccount()">Criar primeiro acesso</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card admin-card admin-editor-card" id="adminEditorCard" hidden>
+      <div class="admin-editor-header">
+        <div>
+          <h2 class="admin-heading">Textos do gerador</h2>
+          <p class="admin-description">Use os campos entre chaves, como <strong>{name}</strong> e <strong>{protocol}</strong>, para manter a personalização automática.</p>
+        </div>
+        <button class="btn-ghost" type="button" onclick="signOutAdmin()">Sair</button>
+      </div>
+      <div id="templateEditorList" class="template-editor-list"></div>
+      <div id="adminSaveMessage" class="admin-message" role="status"></div>
+      <button class="btn" type="button" onclick="saveTemplates()">Salvar alterações</button>
     </div>
   </div>
 </div><!-- /.main -->
