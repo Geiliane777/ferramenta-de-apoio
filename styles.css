@@ -60,7 +60,7 @@ body::before {
 
 /* ─── Sidebar ─── */
 .sidebar {
-  width: 240px;
+  width: 196px;
   min-height: 100vh;
   background: var(--menu-gradiente);
   display: flex;
@@ -73,7 +73,7 @@ body::before {
 }
 
 .sidebar-logo {
-  padding: 28px 24px 20px;
+  padding: 24px 18px 18px;
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
@@ -239,7 +239,7 @@ body::before {
 
 /* ─── Main content ─── */
 .main {
-  margin-left: 240px;
+  margin-left: 196px;
   flex: 1;
   padding: 32px 40px 44px;
   min-height: 100vh;
@@ -247,8 +247,24 @@ body::before {
   z-index: 1;
 }
 
+.brand-watermark {
+  position: fixed;
+  z-index: 0;
+  top: 50%;
+  right: 7%;
+  width: 360px;
+  height: 300px;
+  opacity: 0.055;
+  pointer-events: none;
+  background-image: url('public/images/Logo_OdontoGroup.png');
+  background-repeat: no-repeat;
+  background-size: 330% auto;
+  background-position: center 16%;
+  filter: invert(1);
+}
+
 .content-section {
-  max-width: 920px;
+  max-width: 860px;
   margin: 0 auto;
 }
 
@@ -597,6 +613,7 @@ select option { background: var(--card); color: var(--texto); }
   .sidebar-overlay.open { display: block; }
   .mobile-topbar { display: flex; }
   .main { margin-left: 0; padding: 24px 20px 32px; }
+  .brand-watermark { right: 50%; transform: translateX(50%); width: 300px; height: 260px; opacity: 0.04; }
   .content-section { max-width: 100%; }
   .page-header { margin-bottom: 22px; }
   .card { padding: 24px 20px; }
@@ -607,6 +624,11 @@ select option { background: var(--card); color: var(--texto); }
 body.dark-mode {
   background: var(--dm-fundo);
   color: var(--dm-text);
+}
+
+body.dark-mode .brand-watermark {
+  filter: none;
+  opacity: 0.06;
 }
 
 body.dark-mode::before {
