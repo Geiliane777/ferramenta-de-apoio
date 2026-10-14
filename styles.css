@@ -77,6 +77,16 @@ body::before {
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+.sidebar-brand-logo {
+  display: block;
+  width: 168px;
+  height: auto;
+  max-height: 92px;
+  object-fit: contain;
+  object-position: left center;
+  margin-bottom: 14px;
+}
+
 .sidebar-logo .brand {
   font-family: 'Archivo Black', sans-serif;
   font-size: 18px;
@@ -779,7 +789,39 @@ body.dark-mode .app-footer { color: var(--dm-muted); }
 .admin-editor-header {
   justify-content: space-between;
   align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.admin-kicker {
+  display: block;
+  color: var(--azul);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.template-picker {
+  padding: 20px;
   margin-bottom: 24px;
+  border: 1px solid rgba(37,99,235,0.18);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(16,185,129,0.05));
+}
+
+.template-picker select {
+  background: var(--card);
+  font-size: 16px;
+}
+
+.template-editor-empty {
+  padding: 34px 20px;
+  border: 1px dashed var(--borda);
+  border-radius: var(--radius-sm);
+  color: var(--texto-claro);
+  text-align: center;
+  font-size: 14px;
 }
 
 .admin-editor-header .btn-ghost { flex-shrink: 0; }
@@ -865,10 +907,23 @@ body.dark-mode .btn-delete-template {
 
 body.dark-mode .admin-subheading { color: var(--dm-text); }
 
+body.dark-mode .admin-kicker { color: var(--azul-claro); }
+
 body.dark-mode .admin-add-template { border-top-color: var(--dm-border); }
+
+body.dark-mode .template-picker {
+  border-color: rgba(59,130,246,0.25);
+  background: rgba(59,130,246,0.08);
+}
+
+body.dark-mode .template-picker select { background: var(--dm-input); }
+
+body.dark-mode .template-editor-empty { border-color: var(--dm-border); color: var(--dm-muted); }
 
 @media (max-width: 600px) {
   .admin-form-actions,
   .admin-editor-header { flex-direction: column; align-items: stretch; }
   .admin-form-actions .btn { width: 100%; }
+  .sidebar-brand-logo { width: 148px; }
+  .template-picker { padding: 16px; }
 }

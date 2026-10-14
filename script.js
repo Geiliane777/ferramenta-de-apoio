@@ -413,18 +413,13 @@ Protocolo de atendimento: {protocol}.`
     }
 
     const purposeSelect = document.getElementById('purpose');
-
     data.forEach(template => {
-      if (!Object.prototype.hasOwnProperty.call(texts, template.template_key)) {
-        texts[template.template_key] = template.content;
-        if (purposeSelect && !purposeSelect.querySelector(`option[value="${template.template_key}"]`)) {
-          const opt = document.createElement('option');
-          opt.value = template.template_key;
-          opt.textContent = template.label;
-          purposeSelect.appendChild(opt);
-        }
-      } else {
-        texts[template.template_key] = template.content;
+      texts[template.template_key] = template.content;
+      if (purposeSelect && !purposeSelect.querySelector(`option[value="${template.template_key}"]`)) {
+        const opt = document.createElement('option');
+        opt.value = template.template_key;
+        opt.textContent = template.label;
+        purposeSelect.appendChild(opt);
       }
     });
   }
@@ -459,45 +454,78 @@ Protocolo de atendimento: {protocol}.`
     return option ? option.textContent : key;
   }
 
+  let selectedTemplateKey = '';
+
+  function refreshAdminTemplateOptions() {
+    const select = document.getElementById('adminTemplateSelect');
+    if (!select) return;
+    const currentValue = selectedTemplateKey;
+    select.replaceChildren();
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = '— Selecione uma mensagem —';
+    select.appendChild(placeholder);
+
+    Object.keys(texts).forEach(key => {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = templateLabel(key);
+      select.appendChild(option);
+    });
+    select.value = currentValue;
+  }
+
+  function selectTemplateToEdit(key) {
+    selectedTemplateKey = key;
+    renderTemplateEditor();
+  }
+
   function renderTemplateEditor() {
     const list = document.getElementById('templateEditorList');
     list.replaceChildren();
+    if (!selectedTemplateKey || !Object.prototype.hasOwnProperty.call(texts, selectedTemplateKey)) {
+      const empty = document.createElement('p');
+      empty.className = 'template-editor-empty';
+      empty.textContent = 'Selecione uma mensagem acima para começar a editar.';
+      list.appendChild(empty);
+      return;
+    }
 
-    Object.keys(texts).forEach(key => {
-      const group = document.createElement('div');
-      group.className = 'template-editor-item';
+    const group = document.createElement('div');
+    group.className = 'template-editor-item';
 
-      const header = document.createElement('div');
-      header.className = 'template-editor-header';
+    const header = document.createElement('div');
+    header.className = 'template-editor-header';
 
-      const label = document.createElement('label');
-      label.setAttribute('for', `template-${key}`);
-      label.textContent = templateLabel(key);
+    const label = document.createElement('label');
+    label.setAttribute('for', `template-${selectedTemplateKey}`);
+    label.textContent = templateLabel(selectedTemplateKey);
 
-      const deleteBtn = document.createElement('button');
-      deleteBtn.type = 'button';
-      deleteBtn.className = 'btn-delete-template';
-      deleteBtn.textContent = 'Excluir';
-      deleteBtn.dataset.templateKey = key;
-      deleteBtn.onclick = () => deleteTemplate(key);
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'btn-delete-template';
+    deleteBtn.textContent = 'Excluir mensagem';
+    deleteBtn.onclick = () => deleteTemplate(selectedTemplateKey);
 
-      header.append(label, deleteBtn);
+    header.append(label, deleteBtn);
 
-      const textarea = document.createElement('textarea');
-      textarea.id = `template-${key}`;
-      textarea.dataset.templateKey = key;
-      textarea.rows = 8;
-      textarea.value = texts[key];
+    const textarea = document.createElement('textarea');
+    textarea.id = `template-${selectedTemplateKey}`;
+    textarea.dataset.templateKey = selectedTemplateKey;
+    textarea.rows = 14;
+    textarea.value = texts[selectedTemplateKey];
 
-      group.append(header, textarea);
-      list.appendChild(group);
-    });
+    group.append(header, textarea);
+    list.appendChild(group);
   }
 
   function setAdminView(isAdmin) {
     document.getElementById('adminLoginCard').hidden = isAdmin;
     document.getElementById('adminEditorCard').hidden = !isAdmin;
-    if (isAdmin) renderTemplateEditor();
+    if (isAdmin) {
+      refreshAdminTemplateOptions();
+      renderTemplateEditor();
+    }
   }
 
   async function handleAdminLogin(event) {
@@ -552,14 +580,20 @@ Protocolo de atendimento: {protocol}.`
       return;
     }
 
-    const rows = [...document.querySelectorAll('#templateEditorList textarea')].map(textarea => ({
-      template_key: textarea.dataset.templateKey,
-      label: templateLabel(textarea.dataset.templateKey),
+    const textarea = document.querySelector('#templateEditorList textarea');
+    if (!textarea || !selectedTemplateKey) {
+      showAdminMessage('adminSaveMessage', 'Selecione uma mensagem antes de salvar.', 'error');
+      return;
+    }
+
+    const row = {
+      template_key: selectedTemplateKey,
+      label: templateLabel(selectedTemplateKey),
       content: textarea.value
-    }));
+    };
 
     const supabase = await supabaseClientPromise;
-    const { error } = await supabase.from('text_templates').upsert(rows, { onConflict: 'template_key' });
+    const { error } = await supabase.from('text_templates').upsert(row, { onConflict: 'template_key' });
 
     if (error) {
       console.error('Could not save templates', error);
@@ -567,8 +601,8 @@ Protocolo de atendimento: {protocol}.`
       return;
     }
 
-    rows.forEach(row => { texts[row.template_key] = row.content; });
-    showAdminMessage('adminSaveMessage', 'Alterações salvas com sucesso.', 'success');
+    texts[row.template_key] = row.content;
+    showAdminMessage('adminSaveMessage', 'Mensagem salva com sucesso.', 'success');
   }
 
   function slugifyLabel(label) {
@@ -594,13 +628,13 @@ Protocolo de atendimento: {protocol}.`
     texts[key] = content;
 
     const purposeSelect = document.getElementById('purpose');
-    if (!purposeSelect.querySelector(`option[value="${key}"]`)) {
-      const opt = document.createElement('option');
-      opt.value = key;
-      opt.textContent = label;
-      purposeSelect.appendChild(opt);
-    }
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = label;
+    purposeSelect.appendChild(opt);
 
+    selectedTemplateKey = key;
+    refreshAdminTemplateOptions();
     labelInput.value = '';
     contentInput.value = '';
     renderTemplateEditor();
@@ -624,6 +658,8 @@ Protocolo de atendimento: {protocol}.`
     const opt = document.querySelector(`#purpose option[value="${key}"]`);
     if (opt) opt.remove();
 
+    selectedTemplateKey = '';
+    refreshAdminTemplateOptions();
     renderTemplateEditor();
     showAdminMessage('adminSaveMessage', 'Mensagem excluída.', 'success');
   }
