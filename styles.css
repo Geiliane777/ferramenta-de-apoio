@@ -105,9 +105,26 @@ body::before {
 .sidebar-nav {
   padding: 20px 12px;
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.28) transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.28);
+  border-radius: 999px;
 }
 
 .sidebar-label {
@@ -173,16 +190,17 @@ body::before {
 }
 
 .nav-item.external {
-  color: var(--azul-claro);
+  color: rgba(255,255,255,0.6);
 }
 
 .nav-item.external:hover {
-  background: rgba(59,130,246,0.15);
+  background: rgba(255,255,255,0.1);
   color: #ffffff;
+  border-color: rgba(255,255,255,0.15);
 }
 
 .nav-item.external .nav-icon {
-  background: rgba(59,130,246,0.2);
+  background: rgba(255,255,255,0.08);
 }
 
 .sidebar-footer {
@@ -256,7 +274,7 @@ body::before {
   height: 300px;
   opacity: 0.055;
   pointer-events: none;
-  background-image: url('public/images/Logo_OdontoGroup.png');
+  background-image: url('public/images/Logo_OdontoGroup2.png');
   background-repeat: no-repeat;
   background-size: 330% auto;
   background-position: center 16%;
