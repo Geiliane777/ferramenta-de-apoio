@@ -274,7 +274,8 @@ body::before {
   transform: translate(-50%, -50%);
   width: 850px;
   height: 700px;
-  opacity: 0.15;
+  opacity: 0.25;
+  filter: none;
   pointer-events: none;
   background-image: url('./public/images/Logo_OdontoGroup2.jpg');
   background-repeat: no-repeat;
