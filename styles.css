@@ -266,23 +266,41 @@ body::before {
 }
 
 
+
 .brand-watermark {
   position: fixed;
   z-index: 0;
   top: 50%;
   left: calc(50% + 98px);
   transform: translate(-50%, -50%);
-  width: 850px;
-  height: 700px;
-  opacity: 0.25;
-  filter: none;
+  width: min(850px, calc(100vw - 240px));
+  height: min(700px, 80vh);
+  opacity: 1;
   pointer-events: none;
   background-image: url('./public/images/Logo_OdontoGroup2.jpg');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  filter: invert(1);
+  filter: none;
 }
+
+@media (max-width: 860px) {
+  .brand-watermark {
+    top: 50%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+    width: 85vw;
+    height: 65vh;
+    opacity: 1;
+  }
+}
+
+body.dark-mode .brand-watermark {
+  filter: none;
+  opacity: 1;
+}
+
 
 
 .content-section {
