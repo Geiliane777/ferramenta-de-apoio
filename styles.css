@@ -272,11 +272,11 @@ body::before {
   top: 50%;
   left: calc(50% + 98px);
   transform: translate(-50%, -50%);
-  width: 650px;
-  height: 550px;
-  opacity: 0.07;
+  width: 850px;
+  height: 700px;
+  opacity: 0.15;
   pointer-events: none;
-  background-image: url('public/images/Logo_OdontoGroup.jpg');
+  background-image: url('./public/images/Logo_OdontoGroup2.jpg');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
