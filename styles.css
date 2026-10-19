@@ -7,6 +7,7 @@
   --verde:#10b981;
   --vermelho:#ef4444;
   --fundo:#f4f6fb;
+  --fundo-externo:#07132e;
   --card:#ffffff;
   --texto:#334155;
   --texto-forte:#1e293b;
@@ -39,21 +40,23 @@
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background: var(--fundo);
+  /* Fundo externo fixo: o tema claro/escuro não altera esta camada. */
+  background: #07132e;
   color: var(--texto);
   min-height: 100vh;
   overflow-x: hidden;
-  transition: background 0.4s, color 0.4s;
+  transition: color 0.4s;
 }
 
-/* ─── BG mesh ─── */
+/* Fundo abstrato azul-marinho com iluminação azul e roxa suave. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 10% 10%, rgba(37,99,235,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 90% 90%, rgba(124,58,237,0.05) 0%, transparent 60%);
+    radial-gradient(ellipse 72% 62% at 18% 18%, rgba(37,99,235,0.30) 0%, rgba(37,99,235,0.08) 38%, transparent 70%),
+    radial-gradient(ellipse 68% 60% at 88% 82%, rgba(124,58,237,0.25) 0%, rgba(124,58,237,0.07) 42%, transparent 72%),
+    linear-gradient(135deg, #07132e 0%, #0b1740 52%, #100e32 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -267,34 +270,8 @@ body::before {
 
 
 
-.brand-watermark {
-  position: fixed;
-  z-index: 0;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  opacity: 1;
-  pointer-events: none;
-  background-image: url('./public/images/Logo_OdontoGroup2.jpg');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-position: center;
-  filter: none;
-}
-
-@media (max-width: 860px) {
-  .brand-watermark {
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    opacity: 1;
-  }
-}
-
-body.dark-mode .brand-watermark {
-  filter: none;
-  opacity: 1;
-}
+/* A antiga marca-d'água foi removida: o fundo abstrato é feito em CSS. */
+.brand-watermark { display: none; }
 
 
 
@@ -337,6 +314,27 @@ body.dark-mode .brand-watermark {
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Logo alinhada ao formulário principal */
+.form-brand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 26px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--borda);
+}
+
+.form-brand img {
+  display: block;
+  width: min(220px, 65%);
+  max-height: 76px;
+  object-fit: contain;
+}
+
+body.dark-mode .form-brand {
+  border-bottom-color: var(--dm-border);
 }
 
 /* ─── Form elements ─── */
@@ -657,20 +655,10 @@ select option { background: var(--card); color: var(--texto); }
 }
 
 /* ─── Dark mode ─── */
+/* O tema escuro altera apenas os componentes da área de conteúdo.
+   O fundo abstrato externo e a barra lateral permanecem fixos. */
 body.dark-mode {
-  background: var(--dm-fundo);
-  color: var(--dm-text);
-}
-
-body.dark-mode .brand-watermark {
-  filter: none;
-  opacity: 0.06;
-}
-
-body.dark-mode::before {
-  background:
-    radial-gradient(ellipse 80% 60% at 10% 10%, rgba(37,99,235,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 90% 90%, rgba(124,58,237,0.06) 0%, transparent 60%);
+  color: var(--texto);
 }
 
 body.dark-mode .page-title { color: var(--dm-text); }
