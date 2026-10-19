@@ -265,21 +265,24 @@ body::before {
   z-index: 1;
 }
 
+
 .brand-watermark {
   position: fixed;
   z-index: 0;
   top: 50%;
-  right: 7%;
-  width: 360px;
-  height: 300px;
-  opacity: 0.055;
+  left: calc(50% + 98px);
+  transform: translate(-50%, -50%);
+  width: 650px;
+  height: 550px;
+  opacity: 0.07;
   pointer-events: none;
   background-image: url('public/images/Logo_OdontoGroup2.png');
   background-repeat: no-repeat;
-  background-size: 330% auto;
-  background-position: center 16%;
+  background-size: contain;
+  background-position: center;
   filter: invert(1);
 }
+
 
 .content-section {
   max-width: 860px;
