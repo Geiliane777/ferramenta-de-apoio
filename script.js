@@ -252,73 +252,6 @@
     applyAppSettings();
   }
 
-  function renderAppSettingsEditor() {
-    const container = document.getElementById('appSettingsEditor');
-    if (!container) return;
-    container.replaceChildren();
-
-    if (!appSettingsRows.length) {
-      const note = document.createElement('p');
-      note.className = 'template-editor-empty';
-      note.textContent = 'Nenhuma configuração encontrada. Execute o SQL de migração no Supabase.';
-      container.appendChild(note);
-      return;
-    }
-
-    for (const setting of appSettingsRows) {
-      const group = document.createElement('div');
-      group.className = 'app-setting-item';
-      const label = document.createElement('label');
-      label.htmlFor = `setting-${setting.setting_key}`;
-      label.textContent = setting.label;
-
-      const control = document.createElement(setting.multiline ? 'textarea' : 'input');
-      control.id = `setting-${setting.setting_key}`;
-      control.dataset.settingEditorKey = setting.setting_key;
-      control.dataset.settingEditorLabel = setting.label;
-      control.value = setting.setting_value ?? '';
-      if (setting.multiline) control.rows = 4;
-      else control.type = 'text';
-      group.append(label, control);
-      container.appendChild(group);
-    }
-  }
-
-  async function saveAppSettings() {
-    const isAdmin = await checkAdminSession();
-    if (!isAdmin) {
-      setAdminView(false);
-      showAdminMessage('adminAuthMessage', 'Entre novamente para alterar os textos da interface.', 'error');
-      return;
-    }
-
-    const controls = [...document.querySelectorAll('[data-setting-editor-key]')];
-    if (!controls.length) {
-      showAdminMessage('adminSaveMessage', 'Não há textos de interface para salvar.', 'error');
-      return;
-    }
-
-    const rows = controls.map(control => ({
-      setting_key: control.dataset.settingEditorKey,
-      label: control.dataset.settingEditorLabel,
-      setting_value: control.value,
-      multiline: control.tagName === 'TEXTAREA',
-      updated_at: new Date().toISOString()
-    }));
-
-    const supabase = await supabaseClientPromise;
-    const { error } = await supabase.from('app_settings').upsert(rows, { onConflict: 'setting_key' });
-    if (error) {
-      console.error('Não foi possível salvar app_settings:', error);
-      showAdminMessage('adminSaveMessage', 'Não foi possível salvar os textos da interface. Confira as políticas no Supabase.', 'error');
-      return;
-    }
-
-    appSettingsRows = rows;
-    applyAppSettings(true);
-    showAdminMessage('adminSaveMessage', 'Textos da interface salvos no banco de dados.', 'success');
-  }
-
   async function checkAdminSession() {
     const supabase = await supabaseClientPromise;
     const { data: { session } } = await supabase.auth.getSession();
@@ -425,9 +358,6 @@
     document.getElementById('adminLoginCard').hidden = isAdmin;
     document.getElementById('adminEditorCard').hidden = !isAdmin;
     if (isAdmin) {
-      renderAppSettingsEditor();
-      refreshPlanDetailsOptions();
-      renderPlanDetailEditor();
       refreshAdminTemplateOptions();
       renderTemplateEditor();
     }
@@ -764,7 +694,6 @@
   }
   // ─── Abrangências dos planos: dados carregados e salvos no Supabase ───
   let planDetails = Object.create(null);
-  let selectedPlanCode = '';
 
   async function loadPlanDetails() {
     const supabase = await supabaseClientPromise;
@@ -781,7 +710,6 @@
 
     planDetails = Object.create(null);
     for (const row of (data || [])) planDetails[row.product_code] = row.content;
-    refreshPlanDetailsOptions();
   }
 
   async function consultarPlano() {
@@ -797,151 +725,7 @@
       result.innerHTML = '<span style="color:var(--vermelho)">⚠ Código não localizado. Revise-o e tente novamente.</span>';
       return;
     }
-    result.innerHTML = details;
-  }
-
-  function refreshPlanDetailsOptions() {
-    const select = document.getElementById('planDetailsSelect');
-    if (!select) return;
-    const current = selectedPlanCode;
-    select.replaceChildren();
-    const placeholder = document.createElement('option');
-    placeholder.value = '';
-    placeholder.textContent = '— Selecione um código de produto —';
-    select.appendChild(placeholder);
-
-    Object.keys(planDetails).sort().forEach(code => {
-      const option = document.createElement('option');
-      option.value = code;
-      option.textContent = code;
-      select.appendChild(option);
-    });
-    select.value = current;
-  }
-
-  function selectPlanDetailToEdit(code) {
-    selectedPlanCode = code;
-    renderPlanDetailEditor();
-  }
-
-  function renderPlanDetailEditor() {
-    const container = document.getElementById('planDetailsEditor');
-    if (!container) return;
-    container.replaceChildren();
-    if (!selectedPlanCode || !Object.prototype.hasOwnProperty.call(planDetails, selectedPlanCode)) {
-      const note = document.createElement('p');
-      note.className = 'template-editor-empty';
-      note.textContent = 'Selecione um código acima para editar a abrangência cadastrada.';
-      container.appendChild(note);
-      return;
-    }
-
-    const label = document.createElement('label');
-    label.htmlFor = 'planDetailsContent';
-    label.textContent = `Informações do produto ${selectedPlanCode} (aceita HTML simples como <br> e <strong>)`;
-    const textarea = document.createElement('textarea');
-    textarea.id = 'planDetailsContent';
-    textarea.rows = 10;
-    textarea.value = planDetails[selectedPlanCode];
-    textarea.dataset.planDetailsContent = 'true';
-
-    const actions = document.createElement('div');
-    actions.className = 'plan-details-actions';
-    const save = document.createElement('button');
-    save.type = 'button';
-    save.className = 'btn-ghost';
-    save.textContent = 'Salvar alterações do produto';
-    save.onclick = savePlanDetail;
-    const remove = document.createElement('button');
-    remove.type = 'button';
-    remove.className = 'btn-delete-template';
-    remove.textContent = 'Excluir produto';
-    remove.onclick = () => deletePlanDetail(selectedPlanCode);
-    actions.append(save, remove);
-    container.append(label, textarea, actions);
-  }
-
-  async function savePlanDetail() {
-    const isAdmin = await checkAdminSession();
-    if (!isAdmin) {
-      setAdminView(false);
-      showAdminMessage('adminAuthMessage', 'Entre novamente para alterar as abrangências.', 'error');
-      return;
-    }
-    const textarea = document.querySelector('[data-plan-details-content="true"]');
-    if (!selectedPlanCode || !textarea || !textarea.value.trim()) {
-      showAdminMessage('adminSaveMessage', 'Selecione um produto e preencha as informações.', 'error');
-      return;
-    }
-
-    const row = { product_code: selectedPlanCode, content: textarea.value, updated_at: new Date().toISOString() };
-    const supabase = await supabaseClientPromise;
-    const { error } = await supabase.from('plan_details').upsert(row, { onConflict: 'product_code' });
-    if (error) {
-      console.error('Não foi possível salvar a abrangência:', error);
-      showAdminMessage('adminSaveMessage', 'Não foi possível salvar. Confira as políticas da tabela plan_details.', 'error');
-      return;
-    }
-    planDetails[selectedPlanCode] = row.content;
-    renderPlanDetailEditor();
-    showAdminMessage('adminSaveMessage', `Abrangência do produto ${selectedPlanCode} salva no banco de dados.`, 'success');
-  }
-
-  async function addPlanDetail() {
-    const isAdmin = await checkAdminSession();
-    if (!isAdmin) {
-      setAdminView(false);
-      showAdminMessage('adminAuthMessage', 'Entre novamente para cadastrar abrangências.', 'error');
-      return;
-    }
-    const codeInput = document.getElementById('newPlanCode');
-    const contentInput = document.getElementById('newPlanContent');
-    const code = codeInput.value.trim();
-    const content = contentInput.value.trim();
-    if (!/^\d+$/.test(code) || !content) {
-      showAdminMessage('adminSaveMessage', 'Informe um código numérico e as informações do produto.', 'error');
-      return;
-    }
-    if (Object.prototype.hasOwnProperty.call(planDetails, code)) {
-      showAdminMessage('adminSaveMessage', 'Esse código já existe. Selecione-o acima para editar.', 'error');
-      return;
-    }
-
-    const supabase = await supabaseClientPromise;
-    const { error } = await supabase.from('plan_details').insert({ product_code: code, content });
-    if (error) {
-      console.error('Não foi possível cadastrar a abrangência:', error);
-      showAdminMessage('adminSaveMessage', 'Não foi possível cadastrar o produto. Confira as permissões.', 'error');
-      return;
-    }
-    planDetails[code] = content;
-    selectedPlanCode = code;
-    codeInput.value = '';
-    contentInput.value = '';
-    refreshPlanDetailsOptions();
-    renderPlanDetailEditor();
-    showAdminMessage('adminSaveMessage', `Produto ${code} cadastrado no banco de dados.`, 'success');
-  }
-
-  async function deletePlanDetail(code) {
-    const isAdmin = await checkAdminSession();
-    if (!isAdmin) {
-      setAdminView(false);
-      showAdminMessage('adminAuthMessage', 'Entre novamente para excluir abrangências.', 'error');
-      return;
-    }
-    if (!code || !window.confirm(`Deseja excluir a abrangência do produto ${code}?`)) return;
-    const supabase = await supabaseClientPromise;
-    const { error } = await supabase.from('plan_details').delete().eq('product_code', code);
-    if (error) {
-      showAdminMessage('adminSaveMessage', 'Não foi possível excluir o produto.', 'error');
-      return;
-    }
-    delete planDetails[code];
-    selectedPlanCode = '';
-    refreshPlanDetailsOptions();
-    renderPlanDetailEditor();
-    showAdminMessage('adminSaveMessage', `Produto ${code} excluído.`, 'success');
+    result.textContent = details;
   }
 
   document.addEventListener('DOMContentLoaded', initializeAdmin);
