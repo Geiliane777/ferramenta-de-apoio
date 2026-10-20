@@ -711,6 +711,24 @@ body.dark-mode .card {
 
 body.dark-mode label { color: var(--dm-muted); }
 
+/* Títulos e nomes dos campos dos formulários */
+label,
+.admin-heading,
+.admin-subheading,
+.template-editor-item label {
+  color: #243b64;
+  transition: color 0.25s ease;
+}
+
+/* Títulos no modo escuro */
+body.dark-mode label,
+body.dark-mode .admin-heading,
+body.dark-mode .admin-subheading,
+body.dark-mode .template-editor-item label {
+  color: #f8fafc;
+}
+
+
 body.dark-mode input[type="text"],
 body.dark-mode input[type="number"],
 body.dark-mode select,
