@@ -299,6 +299,26 @@ body::before {
   margin-top: 4px;
 }
 
+/* Corrige as cores dos títulos ao alternar o tema */
+.page-title {
+  color: var(--texto-forte);
+  transition: color 0.25s ease;
+}
+
+.page-subtitle {
+  color: var(--texto-claro);
+  transition: color 0.25s ease;
+}
+
+body.dark-mode .page-title {
+  color: #f8fafc;
+}
+
+body.dark-mode .page-subtitle {
+  color: #cbd5e1;
+}
+
+
 /* ─── Card ─── */
 .card {
   background: var(--card);
