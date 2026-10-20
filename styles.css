@@ -1085,3 +1085,20 @@ body.dark-mode input::placeholder,
 body.dark-mode textarea::placeholder { color: rgba(148,163,184,0.5); }
 
 body.dark-mode select option { color: #f1f5f9; background-color: #1e293b; }
+
+/* Editor de textos da interface (Administração) */
+.admin-settings {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--borda);
+}
+.admin-settings summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--azul);
+  margin-bottom: 8px;
+}
+.admin-settings .form-group { margin-top: 14px; }
+.admin-settings .btn-ghost { margin-top: 20px; }
+body.dark-mode .admin-settings { border-top-color: var(--dm-border); }
+body.dark-mode .admin-settings summary { color: var(--azul-claro); }
