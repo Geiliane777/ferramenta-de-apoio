@@ -1040,76 +1040,48 @@ body.dark-mode .template-editor-empty { border-color: var(--dm-border); color: v
   .template-picker { padding: 16px; }
 }
 
-
-
-
-/* ─── Texto editável carregado do Supabase: contraste dos formulários ─── */
+/* ─── Contraste de textos (bloco consolidado) ───
+   Títulos da página ficam brancos porque ficam sobre o fundo azul fixo.
+   Tudo o que está DENTRO dos cards segue o tema claro/escuro. */
 .page-header .page-title,
-.page-header .page-subtitle {
-  color: #ffffff !important;
-}
+.page-header .page-subtitle { color: #ffffff; }
 
-/* No tema claro, os textos dentro do cartão branco devem ser escuros. */
-body:not(.dark-mode) .card label,
-body:not(.dark-mode) .card .radio-pill,
-body:not(.dark-mode) .card .admin-heading,
-body:not(.dark-mode) .card .admin-subheading,
-body:not(.dark-mode) .card .template-editor-item label {
-  color: #334155 !important;
-}
+/* Tema claro (padrão) */
+label,
+.form-group > label,
+.admin-form label,
+.template-editor-item label,
+.radio-group label { color: #263445; }
 
-body:not(.dark-mode) .card input:not([type="radio"]):not([type="checkbox"]),
-body:not(.dark-mode) .card select,
-body:not(.dark-mode) .card textarea {
-  color: #334155 !important;
-  background-color: #f4f6fb;
-}
+.admin-heading,
+.admin-subheading { color: var(--texto-forte); }
 
-body:not(.dark-mode) .card input::placeholder,
-body:not(.dark-mode) .card textarea::placeholder {
-  color: #94a3b8 !important;
-  opacity: 1;
-}
+.calc-card-label { color: var(--texto-claro); }
 
-body:not(.dark-mode) .card select option {
-  color: #334155;
-  background-color: #ffffff;
-}
+input, select, textarea { color: #334155; }
 
-body:not(.dark-mode) .card .radio-pill:has(input:checked) {
-  color: #2563eb !important;
-}
+input::placeholder,
+textarea::placeholder { color: #94a3b8; opacity: 1; }
 
-/* Modo escuro: mantém contraste nas caixas escuras. */
-body.dark-mode .card label,
-body.dark-mode .card .radio-pill,
-body.dark-mode .card .admin-heading,
-body.dark-mode .card .admin-subheading,
-body.dark-mode .card .template-editor-item label {
-  color: #e2e8f0 !important;
-}
+select option { color: #334155; background-color: #ffffff; }
 
-body.dark-mode .card input:not([type="radio"]):not([type="checkbox"]),
-body.dark-mode .card select,
-body.dark-mode .card textarea {
-  color: #f1f5f9 !important;
-  background-color: #334155;
-}
+/* Tema escuro */
+body.dark-mode label,
+body.dark-mode .form-group > label,
+body.dark-mode .admin-form label,
+body.dark-mode .template-editor-item label,
+body.dark-mode .radio-group label { color: #f1f5f9; }
 
-body.dark-mode .card input::placeholder,
-body.dark-mode .card textarea::placeholder {
-  color: #cbd5e1 !important;
-  opacity: 1;
-}
+body.dark-mode .admin-heading,
+body.dark-mode .admin-subheading { color: #f8fafc; }
 
-body.dark-mode .card select option {
-  color: #f1f5f9;
-  background-color: #1e293b;
-}
+body.dark-mode .calc-card-label { color: var(--dm-muted); }
 
-body.dark-mode .card .radio-pill:has(input:checked) {
-  color: #60a5fa !important;
-}
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea { color: #f1f5f9; }
 
-/* Exibe as informações de abrangência salvas como texto simples no banco. */
-#result { white-space: pre-line; }
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder { color: rgba(148,163,184,0.5); }
+
+body.dark-mode select option { color: #f1f5f9; background-color: #1e293b; }
