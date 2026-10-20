@@ -66,6 +66,7 @@
     }
   }
 
+
   function copiarFallback(text, callback) {
     const ta = document.createElement('textarea');
     ta.value = text;
