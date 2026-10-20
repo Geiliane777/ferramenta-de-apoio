@@ -1,8 +1,22 @@
-  const SUPABASE_URL = 'https://gklawesgnmnxanwqyxwi.supabase.co';
+const SUPABASE_URL = 'https://gklawesgnmnxanwqyxwi.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrbGF3ZXNnbm1ueGFud3F5eHdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NDczNjcsImV4cCI6MjEwNzEyMzM2N30.vH0uQFj2egoKhMZMnXIVyXyu_g_upm1PK7n-e0cqa5k';
   const supabaseClientPromise = import('https://esm.sh/@supabase/supabase-js@2').then(({ createClient }) =>
     createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   );
+
+  // ─── Helpers ───
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function formatBRL(value) {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
 
   // ─── Navigation ───
   function showSection(sectionId, el) {
@@ -46,10 +60,10 @@
   }
 
   // ─── Copy ───
-  function copiarTexto(id) {
+  function copiarTexto(id, btn) {
     const el = document.getElementById(id);
     const text = el.innerText;
-    const btn = document.querySelector('.btn-ghost');
+    btn = btn || el.closest('.card').querySelector('.btn-ghost');
 
     function mostrarSucesso() {
       const orig = btn.innerHTML;
@@ -104,7 +118,7 @@
       <div class="calc-result-grid">
         <div class="calc-card">
           <div class="calc-card-label">Mensalidade</div>
-          <div class="calc-card-value">R$ ${valorMensalidade.toFixed(2)}</div>
+          <div class="calc-card-value">${formatBRL(valorMensalidade)}</div>
         </div>
         <div class="calc-card">
           <div class="calc-card-label">Meses restantes</div>
@@ -112,11 +126,11 @@
         </div>
         <div class="calc-card">
           <div class="calc-card-label">Total de mensalidades</div>
-          <div class="calc-card-value">R$ ${totalRestante.toFixed(2)}</div>
+          <div class="calc-card-value">${formatBRL(totalRestante)}</div>
         </div>
         <div class="calc-card highlight">
           <div class="calc-card-label">Multa a pagar (20%)</div>
-          <div class="calc-card-value">R$ ${multa.toFixed(2)}</div>
+          <div class="calc-card-value">${formatBRL(multa)}</div>
         </div>
       </div>`;
   }
@@ -139,11 +153,11 @@
       <div class="calc-result-grid">
         <div class="calc-card">
           <div class="calc-card-label">Valor total do plano</div>
-          <div class="calc-card-value">R$ ${valorTotal.toFixed(2)}</div>
+          <div class="calc-card-value">${formatBRL(valorTotal)}</div>
         </div>
         <div class="calc-card">
           <div class="calc-card-label">Valor por dia</div>
-          <div class="calc-card-value">R$ ${valorPorDia.toFixed(2)}</div>
+          <div class="calc-card-value">${formatBRL(valorPorDia)}</div>
         </div>
         <div class="calc-card">
           <div class="calc-card-label">Dias</div>
@@ -151,7 +165,7 @@
         </div>
         <div class="calc-card highlight">
           <div class="calc-card-label">Valor pró-rata</div>
-          <div class="calc-card-value">R$ ${valorFinal.toFixed(2)}</div>
+          <div class="calc-card-value">${formatBRL(valorFinal)}</div>
         </div>
       </div>`;
   }
@@ -171,89 +185,292 @@
   }
 
   // ─── Texts ───
-  // Os modelos de mensagem são carregados da tabela text_templates no Supabase.
-  let texts = Object.create(null);
-  let templateLabels = Object.create(null);
-  let appSettingsRows = [];
+  let texts = {
+    tentativaContato: `Título: ODONTOGROUP - TENTATIVA DE CONTATO
 
-  function addPurposeOption(value, label) {
-    const purposeSelect = document.getElementById('purpose');
-    if (!purposeSelect || purposeSelect.querySelector(`option[value="${CSS.escape(value)}"]`)) return;
-    const option = document.createElement('option');
-    option.value = value;
-    option.textContent = label;
-    purposeSelect.appendChild(option);
-  }
+{gender} {name}, {greeting}!
+
+Tentamos contato através do telefone {phone}, porém não obtivemos sucesso.
+Por gentileza, entre em contato com a nossa central de atendimento o mais breve possível referente à sua solicitação do protocolo de atendimento n.º {protocol}.`,
+
+    acusamosRecebimento: `{gender} {name}, {greeting}!
+
+Acusamos o recebimento da sua solicitação por meio do protocolo de n.º {protocol}, iremos verificar as informações relatadas e em breve retornaremos com mais informações.`,
+
+    comprovanteCancelamento: `Título: ODONTOGROUP - COMPROVANTE DE CANCELAMENTO
+
+{gender} {name}, {greeting}!
+
+Em atenção à sua solicitação realizada através do protocolo de n.º {protocol}, segue em anexo o comprovante de cancelamento do contrato.`,
+
+    acusacaoReembolso: `{gender} {name}, {greeting}!
+
+Acusamos o recebimento da sua solicitação através do protocolo de n.º {protocol} e informamos que a documentação foi direcionada ao setor responsável para análise.
+Em breve retornaremos o contato com mais informações.`,
+
+    envioRedes: `Título: ODONTOGROUP - REDES DE ATENDIMENTO
+
+{gender} {name}, {greeting}!
+
+Em atenção à sua solicitação realizada sob protocolo de n° {protocol}, seguem abaixo redes de atendimento conforme solicitado.
+
+(indicação de rede)
+
+Orientamos que entre em contato com as clínicas para realizar o agendamento de consulta, caso tenha dificuldade em realizar o contato junto as clínicas, entre em contato com a nossa central de atendimento para que possamos lhe auxiliar.`,
+
+    agendamento: `Título: ODONTOGROUP - AGENDAMENTO DE CONSULTA
+
+{gender} {name}, {greeting}!
+
+Em atendimento à sua solicitação, realizada sob protocolo de n° {protocol}, listamos abaixo as informações referentes ao agendamento de sua consulta:
+
+Avaliação - {agendEspecialidade}
+Dia: {agendDataHora}
+Clínica: {agendClinica}
+
+Por gentileza, chegue à consulta com antecedência de 10 minutos e leve raio-x, caso possua, isso facilita o seu atendimento.
+
+Obs.: Caso não consiga comparecer ao agendamento informado acima, na data e horário marcado, por gentileza, orientamos que entre em contato diretamente com a clínica para realizar o reagendamento de sua consulta no prazo indicado (24horas de antecedência).`,
+
+    carteirinha: `Título: ODONTOGROUP - CARTEIRINHA
+
+{gender} {name}, {greeting}!
+
+Em atenção à sua solicitação realizada por meio do protocolo de n.º {protocol}, segue em anexo sua carteirinha virtual do plano odontológico.
+
+Baixe nosso aplicativo para acessá-la de forma simples e online. 
+Caso ainda não possua nosso aplicativo, basta buscar por "OdontoGroup Associado" na loja de aplicativos do seu dispositivo celular e realizar o primeiro acesso.`,
+
+    semCPF: `Prezado(a) cliente, {greeting}!
+
+Acusamos o recebimento da sua solicitação e para que possamos localizar o seu contrato, informe-nos seu nome completo, CPF e telefone.`,
+
+    formularioReembolso: `Título: ODONTOGROUP - FORMULÁRIO DE REQUISIÇÃO DE REEMBOLSO
+
+{gender} {name}, {greeting}!
+
+Em atenção à sua solicitação realizada sob protocolo n.º{protocol}, informamos que conforme as diretrizes contratuais, o reembolso é realizado de forma tabelada, ou seja, de acordo com o valor disposto na tabela de reembolso do seu plano, informo que essa tabela está disponível pelo portal SEBRAE.
+Ressaltamos que o tratamento deve estar compreendido na cobertura do seu plano odontológico para que seja possível reembolsar.
+Documentação necessária para análise:
+Formulário de Requisição de Reembolso (FRR), o mesmo é enviado pela operadora, e deve ser devolvido devidamente preenchido em todos os campos, com a seção médica assinada e carimbada pelo cirurgião-dentista responsável;
+Documentação radiográfica (pré e pós-operatória);
+Nota fiscal ou recibo original, emitido pelo profissional executante, com discriminação dos valores;
+Comprovante de pagamento (comprovante de cartão, extrato bancário ou comprovante de transferência/PIX).
+Processamento:
+O prazo para análise e eventual liberação do reembolso será de até 30 dias úteis contados a partir da recepção de toda a documentação em conformidade com os requisitos.
+Ressaltamos que a incompletude documental ou irregularidades nos comprovantes implicarão na suspensão do processo até a devida regularização.`,
+
+    boleto: `Título: ODONTOGROUP - BOLETO
+
+{gender} {name}, {greeting}!
+
+Em atenção à sua solicitação realizada através do protocolo de n.º {protocol}, segue em anexo o boleto referente ao período solicitado.`,
+
+    guiaContratual: `Título: ODONTOGROUP - GUIA DE LEITURA CONTRATUAL
+
+{gender} {name}, {greeting}!
+
+Em atenção à sua solicitação realizada por meio do protocolo de n.º {protocol}, segue em anexo o Guia de Leitura Contratual contendo todas as informações referente ao produto contratado, inclusive a cobertura do plano odontológico.`,
+
+    exclusaoProposta: `Título: ODONTOGROUP - EXCLUSÃO DE PROPOSTA
+
+Prezados, {greeting}!
+
+Conforme atendimento realizado através do protocolo de n.º {protocol}, por gentileza, efetuar o cancelamento da proposta em aberto nos dados abaixo:
+
+Nome: [NOME COMPLETO]
+CPF: [CPF]`,
+
+    demonstrativoIR: `Título: ODONTOGROUP - DEMONSTRATIVO PARA IMPOSTO DE RENDA
+
+{gender} {name}, {greeting}!
+
+Em atenção à sua solicitação realizada por meio do protocolo de n.º {protocol}, segue em anexo o demonstrativo para comprovação de imposto de renda referente ao ano de 2025. 
+
+Acrescentamos que o demonstrativo também está disponível em nosso aplicativo "OdontoGroup – Associado".`,
+
+    demonstrativoPJ: `Título: ODONTOGROUP - DEMONSTRATIVO PARA IMPOSTO DE RENDA - PJ
+
+{gender} {name}, {greeting}!
+
+Em atendimento à sua solicitação realizada por meio do protocolo de n.º {protocol}, informamos que, por se tratar de um plano empresarial, o seu demonstrativo para Imposto de Renda deve ser solicitado diretamente ao setor de Recursos Humanos (RH) da empresa xxxxxxxxxxxxx.
+
+Isso ocorre porque, nessa modalidade de contrato, os valores relacionados ao plano são administrados e registrados pela própria empresa responsável pelo convênio, que possui acesso ao detalhamento das contribuições utilizadas para fins de declaração.
+Dessa forma, orientamos que entre em contato com a empresa/sindicato/órgão para solicitar o documento ou obter as orientações necessárias para emissão do demonstrativo.`,
+
+
+
+    alteracaoPlano: `Título: ODONTOGROUP - INCLUSÃO GDF
+
+{gender} {name}, {greeting}!
+
+Acusamos o recebimento da sua solicitação por meio do protocolo de n.º {protocol} e informamos que a documentação encaminhada foi devidamente direcionada ao setor responsável para análise e finalização do processo.
+
+Esclarecemos que, a partir do primeiro dia do mês seguinte, a inclusão estará vigente em seu cadastro e o plano poderá ser utilizado normalmente, conforme as regras e diretrizes do seu plano odontológico.`,
+
+    contratoNovo: `Título: ODONTOGROUP - INFORMAÇÕES SOBRE O PLANO
+
+{gender} {name}, {greeting}!
+
+Acusamos o recebimento da sua solicitação por meio do protocolo de n.º {protocol} e informamos que o início de vigência do seu plano está previsto para o dia XXXXX. A partir desta data, o acesso ao aplicativo estará liberado, permitindo a consulta detalhada dos serviços contratados, bem como demais funcionalidades disponíveis para o seu plano.
+
+Adicionalmente, informamos que, em breve, nossa equipe de boas-vindas entrará em contato para confirmar os seus dados cadastrais e fornecer todas as orientações necessárias sobre os benefícios contratados, garantindo que você aproveite ao máximo tudo o que o plano oferece.`,
+
+    solicitaCancelamento: `Título: ODONTOGROUP - SOLICITAÇÃO DE CANCELAMENTO
+
+{gender} {name}, {greeting}!
+
+Acusamos o recebimento da sua manifestação por meio do WhatsApp, sob protocolo de n.º {protocol} e informamos que sua solicitação de cancelamento foi devidamente registrada e direcionada ao setor responsável para análise e providências.
+
+O setor responsável de cancelamento realizará contato em até 3 dias úteis, para conclusão da solicitação e formalização do cancelamento.
+
+Antecipamos que o plano possui uma vigência mínima de 12 meses, portanto {multa}
+
+{mensalidade}
+
+Caso seja de seu interesse, podemos encaminhar um boleto bancário com vencimento em até 5 dias a contar da data de hoje, ou, alternativamente, realizar uma nova tentativa de cobrança no cartão de crédito previamente cadastrado. Se preferir efetuar o pagamento utilizando outro cartão de crédito, também podemos encaminhar um link de pagamento para que a transação seja realizada de forma rápida e segura.`,
+
+    coberturaTomo: `Título: ODONTOGROUP - COBERTURA DO PLANO
+
+{gender} {name}, {greeting}!
+
+Em atendimento à sua solicitação registrada por meio do protocolo de n.º {protocol}, informamos que, conforme as regras contratuais do seu plano, não há cobertura para a realização de tomografia.
+
+Ressaltamos, contudo, que o seu plano contempla a cobertura de diversos procedimentos odontológicos, tais como: restaurações, profilaxia (limpeza), atendimentos em odontopediatria, extração de sisos, exames radiológicos convencionais, tratamento de canal (endodontia), pino, coroa, entre outros procedimentos previstos em contrato.
+
+Para consultar a relação completa de procedimentos cobertos, orientamos que realize a verificação por meio do nosso aplicativo ou pelo portal do beneficiário em nosso site, seguindo os caminhos abaixo:
+
+Aplicativo:
+Página inicial > último ícone no canto inferior direito da tela > Meu Plano > Cobertura.
+Site:
+Acesse: https://odontogroup.s4e.com.br/sys/?TipoUsuario=1
+Em seguida: insira seu CPF e senha (a mesma utilizada no aplicativo) > Portal de Informações > Cobertura/Carência.`,
+
+    inclusaoDepGDFC: `Título: ODONTOGROUP - INCLUSÃO DE DEPENDENTES GDF
+
+{gender} {name}, {greeting}!
+
+Acusamos o recebimento da sua solicitação, realizada por meio do protocolo de n.º {protocol} e inicialmente gostaríamos de esclarecer que o ressarcimento de 99% do valor do plano escolhido (limitado a R$ 30,00) é válido somente para o titular, conforme prevê o edital.
+
+Os dependentes não receberão o ressarcimento do GDF, porém o valor para inclusão de dependentes no contrato GDF é abaixo do valor comercializado de forma particular, além dos dependentes inclusos entrarem também sem carência para nenhum procedimento.
+
+Conforme previsto no edital, podem ser dependentes:
+
+O(a) cônjuge ou o(a) companheiro(a), desde que não preencha os requisitos para ser beneficiário titular;
+O(a) filho(a) solteiro(a) e não emancipado(a), o(a) tutelado(a) e o(a) enteado(a) menor de 21 anos, ou filho(a) estudante universitário(a) até 24 anos, e filhos(as) inválidos(as).
+
+Que podem optar por quatro modalidades de plano, sendo eles:
+
+Odonto Clínico: Possui cobertura para mais de 200 procedimentos, como por exemplo: restaurações, limpeza, odontopediatria, extração de siso, radiologia, canal, bloco, pino e coroa total em cerômero para os dentes da frente de canino.
+Valor para o titular: R$ 0,30 (ressarcimento de R$ 29,70 realizado pelo GDF).
+Valor por dependente: R$ 22,90.
+Abrangência Titular: Nacional.
+Abrangência Dependente: AL, DF, GO, PE e TO.
+
+Odonto Doc: Possui toda cobertura do plano Odonto Clínico, além da documentação inicial, final e a instalação do aparelho fixo metálico convencional.
+Valor para o titular: R$ 2,90 (ressarcimento de R$ 30,00 realizado pelo GDF).
+Valor por dependente: R$ 32,90.
+Abrangência Titular: Nacional.
+Abrangência Dependente: AL, DF, GO, PE e TO.
+
+Odonto Prótese: Possui toda cobertura do plano Odonto Clínico, além da placa de bruxismo, clareamento convencional, coroas unitárias em resina para todos os dentes, prótese parcial removível com grampo, prótese parcial removível provisória e a prótese total.
+Valor para o titular: R$ 59,90 (ressarcimento de R$ 30,00 realizado pelo GDF).
+Valor por dependente: R$ 89,90.
+Abrangência Titular: Nacional.
+Abrangência Dependente: AL, DF, GO, PE e TO.
+
+Odonto Orto: Possui toda a cobertura do Odonto Doc, além das manutenções mensais do aparelho e o clareamento caseiro convencional após a retirada do aparelho.
+Valor para o titular: R$ 80,00 (ressarcimento de R$ 30,00 realizado pelo GDF).
+Valor por dependente: R$ 110,00.
+Abrangência Titular: Nacional.
+Abrangência Dependente: AL, DF, GO, PE e TO.
+
+Caso deseje prosseguir com a inclusão, por gentileza, preencha corretamente o formulário de inclusão de dependentes que segue em anexo.
+
+Destacamos que novas inclusões de dependentes em planos já ativos, tem seu início de vigência sempre para o mês seguinte.
+Reforçamos que todos os planos ofertados possuem a vigência padrão de 12 meses, sendo necessário permanecer ativo durante o período de vigência. Após os 12 meses, caso possua interesse em cancelar o plano, é necessário entrar em contato conosco.`,
+
+    envioToken: `Título: ODONTOGROUP - ENVIO DE TOKEN
+
+{gender} {name}, {greeting}!
+
+Em atenção à sua solicitação, registrada por meio do protocolo nº {protocol}, encaminhamos abaixo o link contendo o token de acesso, por meio do qual será possível realizar a alteração ou atualização do cartão de crédito utilizado para o pagamento das mensalidades do seu plano odontológico:
+
+XXXXXXXXXXXX
+
+Orientamos que o procedimento seja realizado dentro do prazo de validade do token, a fim de garantir o cadastro em tempo hábil.
+
+Ressaltamos que o cartão de crédito informado deve, obrigatoriamente, estar em nome do atual responsável financeiro do contrato, em conformidade com as cláusulas contratuais e com a LGPD.`,
+
+    envioProtocolo: `Título: ODONTOGROUP - ENVIO DE PROTOCOLO
+
+{gender} {name}, {greeting}!
+
+Em atendimento à sua solicitação, informamos que o número de protocolo referente ao seu atendimento é nº {protocol}.
+
+Salientamos que este número deve ser utilizado como referência em eventuais contatos futuros, possibilitando maior agilidade na localização e acompanhamento da sua solicitação.`,
+
+    posVendas: `Título: ODONTOGROUP - BOAS-VINDAS PÓS-VENDAS
+
+{gender} {name}, {greeting}!
+
+Seja muito bem-vindo(a) ao nosso plano odontológico! Parabenizamos você por essa excelente escolha. Estamos à disposição para acompanhá-lo(a) em toda a sua jornada conosco.
+ 
+Caso tenha dúvidas ou precise de qualquer informação, nosso Serviço de Atendimento ao Cliente (SAC) está preparado para atendê-lo(a) com atenção e cuidado. Será um prazer falar com você.
+ 
+Informamos que tentamos contato por telefone, por meio do número xxxxxxxxxxxx, porém, infelizmente, não obtivemos sucesso.
+ 
+Anexamos a este e-mail o Guia de Leitura Contratual, que contém todas as informações importantes sobre o plano contratado, incluindo:
+ 
+- Detalhamento da cobertura do seu plano;
+- Vigência contratual de 12 meses;
+- Cláusula de multa rescisória de 20% sobre as parcelas vincendas, conforme estipulado em contrato; Renovação automática.
+- Informações sobre os prazos de carência, contados a partir de:
+ 
+Protocolo de atendimento: {protocol}.`
+  };
+
+  // Cópia dos textos originais, usada para "Restaurar padrão"
+  const defaultTexts = { ...texts };
 
   async function loadSavedTemplates() {
-    const supabase = await supabaseClientPromise;
-    const purposeSelect = document.getElementById('purpose');
-    const placeholder = document.createElement('option');
-    placeholder.value = '';
-    placeholder.textContent = appSettingsRows.find(row => row.setting_key === 'purpose.placeholder')?.setting_value || 'Carregando finalidades...';
-    purposeSelect.replaceChildren(placeholder);
-
+    let supabase;
+    try {
+      supabase = await supabaseClientPromise;
+    } catch (e) {
+      console.error('Supabase indisponível', e);
+      return;
+    }
     const { data, error } = await supabase
       .from('text_templates')
-      .select('template_key, label, content')
-      .order('label', { ascending: true });
+      .select('template_key, label, content');
 
     if (error) {
-      console.error('Não foi possível carregar os modelos do Supabase:', error);
-      placeholder.textContent = 'Não foi possível carregar. Confira a tabela text_templates no Supabase.';
-      showAdminMessage('adminSaveMessage', 'Falha ao carregar mensagens do banco de dados.', 'error');
+      console.error('Could not load saved templates', error);
       return;
     }
 
-    texts = Object.create(null);
-    templateLabels = Object.create(null);
-    for (const template of (data || [])) {
+    const purposeSelect = document.getElementById('purpose');
+    data.forEach(template => {
       texts[template.template_key] = template.content;
-      templateLabels[template.template_key] = template.label;
-      addPurposeOption(template.template_key, template.label);
-    }
-
-    if (!data || data.length === 0) {
-      placeholder.textContent = 'Nenhuma finalidade cadastrada. Execute o SQL de migração enviado.';
-    } else {
-      placeholder.textContent = appSettingsRows.find(row => row.setting_key === 'purpose.placeholder')?.setting_value || '— Selecione um tópico —';
-    }
+      if (purposeSelect && !purposeSelect.querySelector(`option[value="${template.template_key}"]`)) {
+        const opt = document.createElement('option');
+        opt.value = template.template_key;
+        opt.textContent = template.label;
+        purposeSelect.appendChild(opt);
+      }
+    });
     refreshAdminTemplateOptions();
   }
 
-  function applyAppSettings(preserveResults = false) {
-    const values = Object.fromEntries(appSettingsRows.map(row => [row.setting_key, row.setting_value]));
-    document.querySelectorAll('[data-setting]').forEach(element => {
-      if (preserveResults && (element.classList.contains('result-area') || element.id === 'resultado')) return;
-      const key = element.dataset.setting;
-      if (Object.prototype.hasOwnProperty.call(values, key)) element.textContent = values[key];
-    });
-    document.querySelectorAll('[data-placeholder-setting]').forEach(element => {
-      const key = element.dataset.placeholderSetting;
-      if (Object.prototype.hasOwnProperty.call(values, key)) element.placeholder = values[key];
-    });
-    if (values['app.document_title']) document.title = values['app.document_title'];
-  }
-
-  async function loadAppSettings() {
-    const supabase = await supabaseClientPromise;
-    const { data, error } = await supabase
-      .from('app_settings')
-      .select('setting_key, label, setting_value, multiline')
-      .order('label', { ascending: true });
-
-    if (error) {
-      console.error('Não foi possível carregar app_settings:', error);
-      appSettingsRows = [];
-      return;
-    }
-
-    appSettingsRows = data || [];
-    applyAppSettings();
-  }
-
   async function checkAdminSession() {
-    const supabase = await supabaseClientPromise;
+    let supabase;
+    try {
+      supabase = await supabaseClientPromise;
+    } catch (e) {
+      console.error('Supabase indisponível', e);
+      return false;
+    }
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return false;
 
@@ -278,7 +495,8 @@
   }
 
   function templateLabel(key) {
-    return templateLabels[key] || key;
+    const option = document.querySelector(`#purpose option[value="${key}"]`);
+    return option ? option.textContent : key;
   }
 
   let selectedTemplateKey = '';
@@ -293,7 +511,7 @@
     placeholder.textContent = '— Selecione uma mensagem —';
     select.appendChild(placeholder);
 
-    Object.keys(texts).sort((a, b) => templateLabel(a).localeCompare(templateLabel(b), 'pt-BR')).forEach(key => {
+    Object.keys(texts).forEach(key => {
       const option = document.createElement('option');
       option.value = key;
       option.textContent = templateLabel(key);
@@ -324,25 +542,19 @@
     const header = document.createElement('div');
     header.className = 'template-editor-header';
 
-    const nameGroup = document.createElement('div');
-    nameGroup.className = 'template-name-group';
-    const nameLabel = document.createElement('label');
-    nameLabel.setAttribute('for', `template-label-${selectedTemplateKey}`);
-    nameLabel.textContent = 'Nome da finalidade no gerador';
-    const nameInput = document.createElement('input');
-    nameInput.type = 'text';
-    nameInput.id = `template-label-${selectedTemplateKey}`;
-    nameInput.value = templateLabel(selectedTemplateKey);
-    nameInput.dataset.templateLabelKey = selectedTemplateKey;
-    nameGroup.append(nameLabel, nameInput);
+    const label = document.createElement('label');
+    label.setAttribute('for', `template-${selectedTemplateKey}`);
+    label.textContent = templateLabel(selectedTemplateKey);
 
     const deleteBtn = document.createElement('button');
     deleteBtn.type = 'button';
     deleteBtn.className = 'btn-delete-template';
-    deleteBtn.textContent = 'Excluir mensagem';
+    deleteBtn.textContent = Object.prototype.hasOwnProperty.call(defaultTexts, selectedTemplateKey)
+      ? 'Restaurar padrão'
+      : 'Excluir mensagem';
     deleteBtn.onclick = () => deleteTemplate(selectedTemplateKey);
 
-    header.append(nameGroup, deleteBtn);
+    header.append(label, deleteBtn);
 
     const textarea = document.createElement('textarea');
     textarea.id = `template-${selectedTemplateKey}`;
@@ -369,10 +581,17 @@
 
     const email = document.getElementById('adminEmail').value.trim();
     const password = document.getElementById('adminPassword').value;
-    const supabase = await supabaseClientPromise;
+    let supabase;
+    try {
+      supabase = await supabaseClientPromise;
+    } catch (e) {
+      showAdminMessage('adminAuthMessage', 'Sem conexão com o servidor. Tente novamente.', 'error');
+      return;
+    }
     const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error || !(await checkAdminSession())) {
+      if (!error) await supabase.auth.signOut();
       showAdminMessage('adminAuthMessage', 'Não foi possível entrar com essa conta.', 'error');
       return;
     }
@@ -386,7 +605,13 @@
 
     const email = document.getElementById('adminEmail').value.trim();
     const password = document.getElementById('adminPassword').value;
-    const supabase = await supabaseClientPromise;
+    let supabase;
+    try {
+      supabase = await supabaseClientPromise;
+    } catch (e) {
+      showAdminMessage('adminAuthMessage', 'Sem conexão com o servidor. Tente novamente.', 'error');
+      return;
+    }
     const { data, error } = await supabase.auth.signUp({ email, password });
 
     if (error || !data.user) {
@@ -416,40 +641,34 @@
     }
 
     const textarea = document.querySelector('#templateEditorList textarea');
-    const nameInput = document.querySelector('#templateEditorList [data-template-label-key]');
-    if (!textarea || !nameInput || !selectedTemplateKey) {
+    if (!textarea || !selectedTemplateKey) {
       showAdminMessage('adminSaveMessage', 'Selecione uma mensagem antes de salvar.', 'error');
-      return;
-    }
-
-    const label = nameInput.value.trim();
-    if (!label || !textarea.value.trim()) {
-      showAdminMessage('adminSaveMessage', 'Informe o nome da finalidade e o texto da mensagem.', 'error');
       return;
     }
 
     const row = {
       template_key: selectedTemplateKey,
-      label,
-      content: textarea.value,
-      updated_at: new Date().toISOString()
+      label: templateLabel(selectedTemplateKey),
+      content: textarea.value
     };
 
-    const supabase = await supabaseClientPromise;
+    let supabase;
+    try {
+      supabase = await supabaseClientPromise;
+    } catch (e) {
+      showAdminMessage('adminSaveMessage', 'Sem conexão com o servidor. Tente novamente.', 'error');
+      return;
+    }
     const { error } = await supabase.from('text_templates').upsert(row, { onConflict: 'template_key' });
+
     if (error) {
-      console.error('Não foi possível salvar o modelo:', error);
+      console.error('Could not save templates', error);
       showAdminMessage('adminSaveMessage', 'Não foi possível salvar as alterações.', 'error');
       return;
     }
 
     texts[row.template_key] = row.content;
-    templateLabels[row.template_key] = row.label;
-    const purposeOption = document.querySelector(`#purpose option[value="${CSS.escape(row.template_key)}"]`);
-    if (purposeOption) purposeOption.textContent = row.label;
-    refreshAdminTemplateOptions();
-    renderTemplateEditor();
-    showAdminMessage('adminSaveMessage', 'Nome e mensagem salvos no banco de dados.', 'success');
+    showAdminMessage('adminSaveMessage', 'Mensagem salva com sucesso.', 'success');
   }
 
   function slugifyLabel(label) {
@@ -473,7 +692,6 @@
 
     const key = slugifyLabel(label);
     texts[key] = content;
-    templateLabels[key] = label;
 
     const purposeSelect = document.getElementById('purpose');
     const opt = document.createElement('option');
@@ -486,23 +704,40 @@
     labelInput.value = '';
     contentInput.value = '';
     renderTemplateEditor();
-    showAdminMessage('adminSaveMessage', 'Nova mensagem adicionada. Clique em "Salvar alterações" para confirmar.', 'success');
+    showAdminMessage('adminSaveMessage', 'Nova mensagem adicionada. Clique em "Salvar mensagem selecionada" para confirmar.', 'success');
   }
 
   async function deleteTemplate(key) {
-    const supabase = await supabaseClientPromise;
+    const isBuiltin = Object.prototype.hasOwnProperty.call(defaultTexts, key);
+    const actionLabel = isBuiltin ? 'restaurar o texto padrão desta mensagem' : 'excluir esta mensagem';
+    if (!confirm(`Tem certeza que deseja ${actionLabel}?`)) return;
+
+    let supabase;
+    try {
+      supabase = await supabaseClientPromise;
+    } catch (e) {
+      showAdminMessage('adminSaveMessage', 'Sem conexão com o servidor. Tente novamente.', 'error');
+      return;
+    }
     const { error } = await supabase
       .from('text_templates')
       .delete()
       .eq('template_key', key);
 
     if (error) {
-      showAdminMessage('adminSaveMessage', 'Não foi possível excluir a mensagem.', 'error');
+      showAdminMessage('adminSaveMessage', 'Não foi possível concluir a ação.', 'error');
+      return;
+    }
+
+    if (isBuiltin) {
+      // Mensagens originais não somem do gerador: voltam ao texto padrão.
+      texts[key] = defaultTexts[key];
+      renderTemplateEditor();
+      showAdminMessage('adminSaveMessage', 'Texto restaurado ao padrão.', 'success');
       return;
     }
 
     delete texts[key];
-    delete templateLabels[key];
 
     const opt = document.querySelector(`#purpose option[value="${key}"]`);
     if (opt) opt.remove();
@@ -514,19 +749,20 @@
   }
 
   async function signOutAdmin() {
-    const supabase = await supabaseClientPromise;
-    await supabase.auth.signOut();
+    try {
+      const supabase = await supabaseClientPromise;
+      await supabase.auth.signOut();
+    } catch (e) {
+      console.error('Falha ao sair', e);
+    }
     setAdminView(false);
     showAdminMessage('adminAuthMessage', 'Você saiu da área administrativa.', 'success');
   }
 
-  async function initializeAdmin() {
+  function initializeAdmin() {
     document.getElementById('adminAuthForm').addEventListener('submit', handleAdminLogin);
-    await loadAppSettings();
-    await loadSavedTemplates();
-    await loadPlanDetails();
-    const isAdmin = await checkAdminSession();
-    setAdminView(isAdmin);
+    loadSavedTemplates().catch(err => console.error('Falha ao carregar modelos', err));
+    checkAdminSession().then(setAdminView).catch(err => console.error(err));
   }
 
   // ─── Text editor and admin access ───
@@ -604,10 +840,6 @@
       resultElement.innerHTML = '<span style="color:var(--vermelho)">⚠ Selecione uma finalidade.</span>';
       return;
     }
-    if (!Object.prototype.hasOwnProperty.call(texts, purpose)) {
-      resultElement.textContent = 'Esta mensagem não está carregada do banco de dados. Atualize a página ou confira a tabela text_templates.';
-      return;
-    }
     if (purpose === 'tentativaContato' && !phone) {
       resultElement.innerHTML = '<span style="color:var(--vermelho)">⚠ Informe o telefone cadastrado.</span>';
       return;
@@ -659,82 +891,91 @@
       return;
     }
 
-    let text = texts[purpose]
-      .replace(/{name}/g, name)
-      .replace(/{gender}/g, genderPrefix)
-      .replace(/{genderAdj}/g, genderAdj)
-      .replace(/{genderPart}/g, genderPart)
-      .replace(/{greeting}/g, greeting)
-      .replace(/{protocol}/g, protocol)
-      .replace(/{phone}/g, phone)
-      .replace(/{agendEspecialidade}/g, agendEspecialidade)
-      .replace(/{agendDataHora}/g, agendDataHora)
-      .replace(/{agendClinica}/g, agendClinica);
+    const values = {
+      name,
+      gender: genderPrefix,
+      genderAdj,
+      genderPart,
+      greeting,
+      protocol,
+      phone,
+      agendEspecialidade,
+      agendDataHora,
+      agendClinica
+    };
 
     if (purpose === 'solicitaCancelamento') {
       const vigencia = document.querySelector('input[name="vigencia"]:checked').value;
       const mensalidade = document.querySelector('input[name="mensalidade"]:checked').value;
       const mesMensalidade = document.getElementById("mesMensalidade").value.trim();
 
-      const multaTexto = vigencia === 'sim'
+      values.multa = vigencia === 'sim'
         ? 'não haverá cobrança de multa contratual.'
         : 'haverá cobrança de multa contratual.';
 
-      const mensalidadeTexto = mensalidade === 'sim'
+      values.mensalidade = mensalidade === 'sim'
         ? 'Reforçamos que o seu contrato possui mensalidades em aberto, portanto orientamos que entre em contato com a nossa central de atendimento, caso seja do seu interesse.'
         : `Reforçamos que o seu contrato não possui mensalidades em aberto, sendo a última mensalidade devida referente ao mês ${mesMensalidade}.`;
-
-      text = text
-        .replace(/{multa}/g, multaTexto)
-        .replace(/{mensalidade}/g, mensalidadeTexto);
     }
+
+    // Uma única passada: valores digitados nunca são reinterpretados como marcadores
+    // e caracteres como "$&" ou "$$" não quebram a substituição.
+    let text = (texts[purpose] || '').replace(/\{(\w+)\}/g, (match, key) =>
+      Object.prototype.hasOwnProperty.call(values, key) ? values[key] : match
+    );
+
+    // Escapa HTML (nome, clínica etc.) antes de converter quebras de linha
+    text = escapeHtml(text);
 
     text = text.replace(/\n/g, '<br>');
     resultElement.innerHTML = text;
   }
-  // ─── Abrangências dos planos: dados carregados e salvos no Supabase ───
-  let planDetails = Object.create(null);
+  // ─── Planos ───
+  function consultarPlano() {
+    const input = document.getElementById("inputNumber").value;
+    const n = Number(input);
+    let r = "";
 
-  async function loadPlanDetails() {
-    const supabase = await supabaseClientPromise;
-    const { data, error } = await supabase
-      .from('plan_details')
-      .select('product_code, content')
-      .order('product_code', { ascending: true });
+    const planos = {
+      411630995: "Grupo de estados.<br><strong>Abrangência:</strong> AL, BA, DF, GO, MG, PE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      702168992: "Grupo de estados.<br><strong>Abrangência:</strong> AL, BA, DF, GO, MG, PE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      473269153: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      468299128: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      486254206: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      486113202: "Nacional.<br><strong>Abrangência:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção+Prótese.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      486114201: "Nacional.<br><strong>Abrangência:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Com Prótese.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      481366189: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RJ, RN, RS, SE, SP e TO.<br><strong>Formação de preço:</strong> Misto.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Emergência RN 59.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      442562036: "Nacional.<br><strong>Abrangência:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      437337025: "Grupo de estados.<br><strong>Abrangência:</strong> DF, GO, TO, PE, AL.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Coletivo empresarial.",
+      476630160: "Nome Comercial: Coletivo Adesão Bronze II.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Municipal.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Brasília (DF).<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Franquia.<br><strong>Rol:</strong> Com Prótese.",
+      468297121: "Nome Comercial: Coletivo Adesão Mais II.B.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Grupo de Estados.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE, TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Doc+Aparelho+Manutenção.",
+      484268195: "Nome Comercial: Essencial Odonto Brasília CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Municipal.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Brasília (DF).<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Co-participação.<br><strong>Rol:</strong> Mínimo ANS.",
+      471297148: "Nome Comercial: FR Clínico Por Adesão II.B (Single).<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Grupo de Estados.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE, TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Franquia.<br><strong>Rol:</strong> Mínimo ANS.",
+      496043232: "Nome Comercial: Master Especial Premium CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção+Prótese+Clareamento+Implante.",
+      474865154: "Nome Comercial: Master Especial.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Co-participação.<br><strong>Rol:</strong> Doc Orto+Aparelho+Manutenção+Prótese+Clareamento.",
+      489270214: "Nome Comercial: Odonto Doc CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho.",
+      489269211: "Nome Comercial: Odonto Doc Premium CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Prótese.",
+      489285212: "Nome Comercial: Odonto Orto CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção+Prótese.",
+      489327211: "Nome Comercial: Odonto Orto Premium CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção+Prótese.",
+      481954183: "Nome Comercial: Odonto SOS CA.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Grupo de Estados.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RJ, RN, RS, SE, SP, TO.<br><strong>Formação de preço:</strong> Misto.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Emergência RN 59.",
+      467608124: "Nome Comercial: Odontoclínico Coletivo II.B.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Grupo de Estados.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE, TO.<br><strong>Formação de preço:</strong> Pré-Estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.",
+      442559036: "Nome Comercial: Odontoclínico Coletivo por Adesão.<br><strong>Contratação:</strong> Coletivo por Adesão.<br><strong>Abrangência Geográfica:</strong> Nacional.<br><strong>Situação:</strong> Ativo.<br><strong>Atuação:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-Estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.",
+      442561038: "Nacional.<br><strong>Abrangência:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Co-participação.<br><strong>Rol:</strong> Documentação orto+Aparelho+Manutenções.<br><strong>Contratação:</strong> Individual ou Familiar.",
+      411629991: "Grupo de estados.<br><strong>Abrangência:</strong> AL, BA, DF, GO, MG, PE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      473268155: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      468461133: "Municipal.<br><strong>Abrangência:</strong> Maceió (AL), Manaus (AM), Salvador (BA), Fortaleza (CE), Brasília (DF), Goiânia (GO).<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção.<br><strong>Contratação:</strong> Individual ou familiar.",
+      484937200: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Doc orto+Aparelho.<br><strong>Contratação:</strong> Individual ou familiar.",
+      485957200: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      485502207: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Orto Doc+Aparelho+Manutenção+Clareamento.<br><strong>Contratação:</strong> Individual ou familiar.",
+      485086206: "Grupo de estados.<br><strong>Abrangência:</strong> AL, AM, BA, CE, DF, GO, MA, MG, MS, MT, PA, PB, PE, PI, RN, SE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Prótese+Placa oclusal.<br><strong>Contratação:</strong> Individual ou familiar.",
+      459559099: "Municipal.<br><strong>Abrangência:</strong> Brasília (DF), Goiânia (GO), Recife (PE) ou Maceió (AL).<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      442560030: "Nacional.<br><strong>Abrangência:</strong> Nacional.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Co-participação.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      411631993: "Grupo de estados.<br><strong>Abrangência:</strong> AL, BA, DF, GO, MG, PE e TO.<br><strong>Formação de preço:</strong> Pré-estabelecido.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Mínimo ANS.<br><strong>Contratação:</strong> Individual ou familiar.",
+      496805231: "Nacional.<br><strong>Nome Comercial:</strong> Odonto Doc NA.<br><strong>Abrangência:</strong> Nacional.<br><strong>Fator moderador:</strong> Não tem.<br><strong>Rol:</strong> Instalação do Aparelho+Documentação.<br><strong>Contratação:</strong> Individual ou Familiar."
+    };
 
-    if (error) {
-      console.error('Não foi possível carregar as abrangências dos planos:', error);
-      planDetails = Object.create(null);
-      return;
-    }
-
-    planDetails = Object.create(null);
-    for (const row of (data || [])) planDetails[row.product_code] = row.content;
-  }
-
-  async function consultarPlano() {
-    const code = document.getElementById('inputNumber').value.trim();
-    const result = document.getElementById('resultado');
-    if (!code) {
-      result.textContent = 'Informe o código do produto para consultar.';
-      return;
-    }
-
-    const details = planDetails[code];
-    if (!details) {
-      result.innerHTML = '<span style="color:var(--vermelho)">⚠ Código não localizado. Revise-o e tente novamente.</span>';
-      return;
-    }
-    result.textContent = details;
+    r = planos[n] || '<span style="color:var(--vermelho)">⚠ Código não localizado. Revise-o e tente novamente.</span>';
+    document.getElementById("resultado").innerHTML = r;
   }
 
   document.addEventListener('DOMContentLoaded', initializeAdmin);
-
-function updateFormLogo(isDark) {
-  const logo = document.getElementById('formLogo');
-  if (!logo) return;
-
-  logo.src = isDark
-    ? logo.dataset.logoDark
-    : logo.dataset.logoLight;
-}
