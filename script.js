@@ -886,3 +886,12 @@ Protocolo de atendimento: {protocol}.`
   }
 
   document.addEventListener('DOMContentLoaded', initializeAdmin);
+
+function updateFormLogo(isDark) {
+  const logo = document.getElementById('formLogo');
+  if (!logo) return;
+
+  logo.src = isDark
+    ? logo.dataset.logoDark
+    : logo.dataset.logoLight;
+}
