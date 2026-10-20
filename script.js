@@ -24,11 +24,25 @@
     document.getElementById('overlay').classList.remove('open');
   }
 
+ 
   // ─── Theme ───
   function syncAndToggle(src) {
-    const other = document.getElementById(src.id === 'toggleModeBtn' ? 'toggleModeBtn2' : 'toggleModeBtn');
+    const other = document.getElementById(
+      src.id === 'toggleModeBtn' ? 'toggleModeBtn2' : 'toggleModeBtn'
+    );
+
     if (other) other.checked = src.checked;
+
     document.body.classList.toggle('dark-mode', src.checked);
+
+    // Troca a logo central conforme o tema
+    const logo = document.getElementById('formLogo');
+
+    if (logo) {
+      logo.src = src.checked
+        ? logo.dataset.logoDark
+        : logo.dataset.logoLight;
+    }
   }
 
   // ─── Copy ───
