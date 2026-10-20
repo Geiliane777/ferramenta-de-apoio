@@ -347,43 +347,6 @@
         <button class="btn-ghost" type="button" onclick="signOutAdmin()">Sair</button>
       </div>
 
-      <div class="admin-settings-section">
-        <div>
-          <span class="admin-kicker">Configurações compartilhadas</span>
-          <h3 class="admin-subheading">Editar textos da interface</h3>
-          <p class="admin-description">Altere títulos, descrições, rótulos e exemplos. As mudanças são salvas no Supabase e aparecem para todos os usuários.</p>
-        </div>
-        <div id="appSettingsEditor" class="app-settings-editor"></div>
-        <button class="btn-ghost" type="button" onclick="saveAppSettings()">Salvar textos da interface</button>
-      </div>
-
-      <div class="admin-settings-section plan-details-section">
-        <div>
-          <span class="admin-kicker">Dados de abrangência</span>
-          <h3 class="admin-subheading">Editar informações dos produtos</h3>
-          <p class="admin-description">Os dados consultados pela ferramenta Abrangências ficam no Supabase. Edite informações existentes ou cadastre um novo código sem alterar o JavaScript.</p>
-        </div>
-        <div class="form-group">
-          <label for="planDetailsSelect">Produto cadastrado</label>
-          <select id="planDetailsSelect" onchange="selectPlanDetailToEdit(this.value)">
-            <option value="">— Selecione um código de produto —</option>
-          </select>
-        </div>
-        <div id="planDetailsEditor" class="plan-details-editor"></div>
-        <div class="plan-details-new">
-          <h4 class="admin-subheading">Cadastrar nova abrangência</h4>
-          <div class="form-group">
-            <label for="newPlanCode">Código do produto (Registro ANS)</label>
-            <input type="text" id="newPlanCode" inputmode="numeric" placeholder="Ex: 473269153">
-          </div>
-          <div class="form-group">
-            <label for="newPlanContent">Informações da abrangência</label>
-            <textarea id="newPlanContent" rows="6" placeholder="Informe cobertura, abrangência, contratação e demais detalhes. É permitido usar &lt;br&gt; e &lt;strong&gt; para formatar."></textarea>
-          </div>
-          <button class="btn-ghost" type="button" onclick="addPlanDetail()">Cadastrar produto</button>
-        </div>
-      </div>
-
       <div class="template-picker">
         <label for="adminTemplateSelect">Mensagem para editar</label>
         <select id="adminTemplateSelect" onchange="selectTemplateToEdit(this.value)">
@@ -416,7 +379,7 @@
 </div><!-- /.main -->
 
   <script src="script.js"></script>
-<script src="styles.css"></script>
+
 <footer class="app-footer">
 </footer>
 </body>
