@@ -422,6 +422,7 @@ Protocolo de atendimento: {protocol}.`
         purposeSelect.appendChild(opt);
       }
     });
+        refreshAdminTemplateOptions();
   }
 
   async function checkAdminSession() {
