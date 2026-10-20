@@ -1041,108 +1041,165 @@ body.dark-mode .template-editor-empty { border-color: var(--dm-border); color: v
 }
 
 
-/* ─── FIXO: textos acima dos formulários sempre brancos ─── */
-label,
-.form-group > label,
-.admin-form label,
-.template-editor-item label,
-.admin-heading,
-.admin-subheading,
-.page-header .page-title,
-.page-header .page-subtitle,
-.calc-card-label {
-  color: #ffffff !important;
-}
 
-/* ─── AJUSTE: manter brancos apenas os títulos acima dos formulários ─── */
-.admin-heading,
-.admin-subheading,
-.page-header .page-title,
-.page-header .page-subtitle,
-.calc-card-label {
-  color: #ffffff !important;
-}
 
-/* No modo claro, labels e textos de seleção ficam escuros e legíveis. */
-body:not(.dark-mode) label,
-body:not(.dark-mode) .form-group > label,
-body:not(.dark-mode) .admin-form label,
-body:not(.dark-mode) .template-editor-item label {
-  color: #263445 !important;
-}
-
-body:not(.dark-mode) select,
-body:not(.dark-mode) select option,
-body:not(.dark-mode) input,
-body:not(.dark-mode) textarea {
-  color: #263445;
-}
-
-/* No modo escuro, os textos dos campos continuam claros. */
-body.dark-mode label,
-body.dark-mode .form-group > label,
-body.dark-mode .admin-form label,
-body.dark-mode .template-editor-item label,
-body.dark-mode select,
-body.dark-mode select option,
-body.dark-mode input,
-body.dark-mode textarea {
-  color: #f8fafc;
-}
-/* Corrige a visibilidade dos campos do formulário */
-.form-group input,
-.form-group select,
-.form-group textarea,
-input,
-select,
-textarea {
-  color: #334155;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #94a3b8;
-  opacity: 1;
-}
-
-/* Opções dentro das listas de seleção */
-select option {
-  color: #334155;
-  background-color: #ffffff;
-}
-
-/* Textos e opções dos botões de escolha */
-.form-group label,
-.radio-group label,
-.checkbox-group label,
-.form-check label {
-  color: #334155 !important;
-}
-
-/* Mantém os títulos da página brancos */
+/* ─── Texto editável carregado do Supabase: contraste dos formulários ─── */
 .page-header .page-title,
 .page-header .page-subtitle {
   color: #ffffff !important;
 }
 
-/* Preserva o contraste no modo escuro */
-body.dark-mode .form-group input,
-body.dark-mode .form-group select,
-body.dark-mode .form-group textarea,
-body.dark-mode input,
-body.dark-mode select,
-body.dark-mode textarea {
-  color: #f1f5f9;
+/* No tema claro, os textos dentro do cartão branco devem ser escuros. */
+body:not(.dark-mode) .card label,
+body:not(.dark-mode) .card .radio-pill,
+body:not(.dark-mode) .card .admin-heading,
+body:not(.dark-mode) .card .admin-subheading,
+body:not(.dark-mode) .card .template-editor-item label {
+  color: #334155 !important;
 }
 
-body.dark-mode select option {
+body:not(.dark-mode) .card input:not([type="radio"]):not([type="checkbox"]),
+body:not(.dark-mode) .card select,
+body:not(.dark-mode) .card textarea {
+  color: #334155 !important;
+  background-color: #f4f6fb;
+}
+
+body:not(.dark-mode) .card input::placeholder,
+body:not(.dark-mode) .card textarea::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1;
+}
+
+body:not(.dark-mode) .card select option {
+  color: #334155;
+  background-color: #ffffff;
+}
+
+body:not(.dark-mode) .card .radio-pill:has(input:checked) {
+  color: #2563eb !important;
+}
+
+/* Modo escuro: mantém contraste nas caixas escuras. */
+body.dark-mode .card label,
+body.dark-mode .card .radio-pill,
+body.dark-mode .card .admin-heading,
+body.dark-mode .card .admin-subheading,
+body.dark-mode .card .template-editor-item label {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .card input:not([type="radio"]):not([type="checkbox"]),
+body.dark-mode .card select,
+body.dark-mode .card textarea {
+  color: #f1f5f9 !important;
+  background-color: #334155;
+}
+
+body.dark-mode .card input::placeholder,
+body.dark-mode .card textarea::placeholder {
+  color: #cbd5e1 !important;
+  opacity: 1;
+}
+
+body.dark-mode .card select option {
   color: #f1f5f9;
   background-color: #1e293b;
 }
 
-body.dark-mode .form-group label,
-body.dark-mode .radio-group label,
-body.dark-mode .checkbox-group label,
-body.dark-mode .form-check label {
-  color: #f1f5f9 !important;
+body.dark-mode .card .radio-pill:has(input:checked) {
+  color: #60a5fa !important;
 }
+
+/* Editor de configurações do banco de dados */
+.admin-settings-section {
+  margin: 26px 0;
+  padding: 22px 0;
+  border-top: 1px solid var(--borda);
+  border-bottom: 1px solid var(--borda);
+}
+.app-settings-editor {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0;
+}
+.app-setting-item {
+  min-width: 0;
+}
+.app-setting-item label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--texto-forte) !important;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  text-transform: none;
+}
+.app-setting-item input,
+.app-setting-item textarea {
+  width: 100%;
+  min-height: 42px;
+  font-size: 13px;
+  padding: 10px 12px;
+}
+.app-setting-item textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+.template-name-group {
+  flex: 1;
+  min-width: 0;
+}
+.template-name-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--texto-forte) !important;
+}
+.template-name-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--borda);
+  border-radius: var(--radius-sm);
+  background: var(--fundo);
+  color: var(--texto);
+  font: inherit;
+}
+body.dark-mode .admin-settings-section { border-color: var(--dm-border); }
+body.dark-mode .app-setting-item label,
+body.dark-mode .template-name-group label { color: var(--dm-text) !important; }
+body.dark-mode .template-name-group input { background: var(--dm-input); color: var(--dm-text); border-color: var(--dm-border); }
+@media (max-width: 700px) {
+  .app-settings-editor { grid-template-columns: 1fr; }
+}
+
+.plan-details-editor,
+.plan-details-new {
+  margin-top: 14px;
+}
+.plan-details-editor > label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--texto-forte) !important;
+  font-weight: 700;
+}
+.plan-details-editor textarea,
+.plan-details-new textarea {
+  width: 100%;
+  min-height: 140px;
+  line-height: 1.5;
+  font-size: 13px;
+}
+.plan-details-new {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--borda);
+}
+.plan-details-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+body.dark-mode .plan-details-editor > label { color: var(--dm-text) !important; }
+body.dark-mode .plan-details-new { border-top-color: var(--dm-border); }
