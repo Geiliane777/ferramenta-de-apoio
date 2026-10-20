@@ -1053,3 +1053,39 @@ label,
 .calc-card-label {
   color: #ffffff !important;
 }
+
+/* ─── AJUSTE: manter brancos apenas os títulos acima dos formulários ─── */
+.admin-heading,
+.admin-subheading,
+.page-header .page-title,
+.page-header .page-subtitle,
+.calc-card-label {
+  color: #ffffff !important;
+}
+
+/* No modo claro, labels e textos de seleção ficam escuros e legíveis. */
+body:not(.dark-mode) label,
+body:not(.dark-mode) .form-group > label,
+body:not(.dark-mode) .admin-form label,
+body:not(.dark-mode) .template-editor-item label {
+  color: #263445 !important;
+}
+
+body:not(.dark-mode) select,
+body:not(.dark-mode) select option,
+body:not(.dark-mode) input,
+body:not(.dark-mode) textarea {
+  color: #263445;
+}
+
+/* No modo escuro, os textos dos campos continuam claros. */
+body.dark-mode label,
+body.dark-mode .form-group > label,
+body.dark-mode .admin-form label,
+body.dark-mode .template-editor-item label,
+body.dark-mode select,
+body.dark-mode select option,
+body.dark-mode input,
+body.dark-mode textarea {
+  color: #f8fafc;
+}
