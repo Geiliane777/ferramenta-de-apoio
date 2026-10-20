@@ -7,13 +7,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="https://img.icons8.com/?size=100&id=VujT2gb9fKd5&format=png&color=000000" type="image/x-icon">
+  <link rel="icon" href="https://img.icons8.com/?size=100&id=VujT2gb9fKd5&format=png&color=000000" type="image/png">
+  <link rel="stylesheet" href="styles.css">
 
-    <link rel="stylesheet" href="styles.css">
-
-  <meta property="og:image" content="https://bolt.new/static/og_default.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
 </head>
 <body>
 
@@ -237,7 +233,7 @@
         </div>
         <div id="generatedText" class="result-area">Preencha os campos acima e clique em "Gerar texto".</div>
         <div class="result-actions">
-          <button class="btn-ghost" onclick="copiarTexto('generatedText')">
+          <button class="btn-ghost" onclick="copiarTexto('generatedText', this)">
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
             Copiar texto
           </button>
