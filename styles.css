@@ -681,8 +681,27 @@ body.dark-mode {
   color: var(--texto);
 }
 
-body.dark-mode .page-title { color: var(--dm-text); }
-body.dark-mode .page-subtitle { color: var(--dm-muted); }
+
+/* Títulos da área de conteúdo */
+.page-header .page-title {
+  color: #243b64;
+  transition: color 0.25s ease;
+}
+
+.page-header .page-subtitle {
+  color: #64748b;
+  transition: color 0.25s ease;
+}
+
+/* Tema escuro: somente os títulos do conteúdo */
+body.dark-mode .page-header .page-title {
+  color: #f8fafc;
+}
+
+body.dark-mode .page-header .page-subtitle {
+  color: #cbd5e1;
+}
+
 
 body.dark-mode .card {
   background: var(--dm-card);
