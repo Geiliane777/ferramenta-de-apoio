@@ -31,49 +31,49 @@
 <div class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <img class="sidebar-brand-logo" src="public/images/Logo_OdontoGroup.png" alt="OdontoGroup">
-    <div class="brand-sub">Ferramentas de Apoio</div>
+    <div class="brand-sub" data-setting="nav.brand_subtitle">Ferramentas de Apoio</div>
   </div>
 
   <nav class="sidebar-nav">
-    <div class="sidebar-label">Ferramentas</div>
+    <div class="sidebar-label" data-setting="nav.section_label">Ferramentas</div>
 
     <div class="nav-item active" onclick="showSection('gerador', this)">
       <div class="nav-icon">✉️</div>
-      Gerador de textos
+      <span data-setting="nav.generator">Gerador de textos</span>
     </div>
 
     <div class="nav-item" onclick="showSection('prorata', this)">
       <div class="nav-icon">📅</div>
-      Calcular pró-rata
+      <span data-setting="nav.prorata">Calcular pró-rata</span>
     </div>
 
     <div class="nav-item" onclick="showSection('multa', this)">
       <div class="nav-icon">⚖️</div>
-      Calcular multa
+      <span data-setting="nav.multa">Calcular multa</span>
     </div>
 
     <div class="nav-item" onclick="showSection('abrangencias', this)">
       <div class="nav-icon">🔍</div>
-      Abrangências
+      <span data-setting="nav.abrangencias">Abrangências</span>
     </div>
 
     <div class="sidebar-divider"></div>
 
     <a class="nav-item external" href="https://geiliane777.github.io/clinicas-especialistas/index.html" target="_blank" rel="noopener">
       <div class="nav-icon">🏥</div>
-      Redes credenciadas
+      <span data-setting="nav.network">Redes credenciadas</span>
     </a>
 
     <div class="sidebar-divider"></div>
 
     <div class="nav-item" onclick="showSection('admin', this)">
       <div class="nav-icon">⚙</div>
-      Administração
+      <span data-setting="nav.admin">Administração</span>
     </div>
   </nav>
 
   <div class="sidebar-footer">
-    <span class="theme-label">Modo escuro</span>
+    <span class="theme-label" data-setting="nav.theme">Modo escuro</span>
     <label class="toggle-pill">
       <input type="checkbox" id="toggleModeBtn" onchange="syncAndToggle(this)">
       <div class="toggle-pill-track"></div>
@@ -88,8 +88,8 @@
   <!-- Gerador de Textos -->
   <div id="gerador" class="content-section active">
     <div class="page-header">
-      <h1 class="page-title">Gerador de textos</h1>
-      <p class="page-subtitle">Preencha os campos para gerar a mensagem personalizada.</p>
+      <h1 class="page-title" data-setting="page.generator.title">Gerador de textos</h1>
+      <p class="page-subtitle" data-setting="page.generator.subtitle">Preencha os campos para gerar a mensagem personalizada.</p>
     </div>
     <div class="card">
       <div class="form-brand">
@@ -102,140 +102,119 @@
 >
       </div>
       <div class="form-group" id="nameGroup">
-        <label for="name">Nome do cliente</label>
-        <input type="text" id="name" placeholder="Ex: Ana Paula Silveira">
+        <label for="name" data-setting="form.name.label">Nome do cliente</label>
+        <input type="text" id="name" placeholder="Ex: Ana Paula Silveira" data-setting-placeholder="form.name.placeholder">
       </div>
 
       <div class="form-group" id="protocolGroup">
-        <label for="protocol">Número do protocolo</label>
-        <input type="text" id="protocol" placeholder="Somente números"
+        <label for="protocol" data-setting="form.protocol.label">Número do protocolo</label>
+        <input type="text" id="protocol" placeholder="Somente números" data-setting-placeholder="form.protocol.placeholder"
                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                pattern="[0-9]*">
       </div>
 
       <div class="form-group">
-        <label for="purpose">Finalidade</label>
+        <label for="purpose" data-setting="form.purpose.label">Finalidade</label>
         <select id="purpose" onchange="togglePhoneField()">
-          <option value="">— Selecione um tópico —</option>
-          <option value="acusamosRecebimento">Acusar recebimento</option>
-          <option value="acusacaoReembolso">Acusar recebimento — reembolso</option>
-          <option value="agendamento">Agendamento de consulta</option>
-          <option value="alteracaoPlano">Acusar recebimento — inclusão GDF</option>
-          <option value="posVendas">Boas-vindas pós-vendas</option>
-          <option value="carteirinha">Carteirinha</option>
-          <option value="coberturaTomo">Cobertura do plano — tomografia</option>
-          <option value="comprovanteCancelamento">Comprovante de cancelamento</option>
-          <option value="demonstrativoIR">Demonstrativo IR — PF</option>
-          <option value="demonstrativoPJ">Demonstrativo IR — PJ</option>
-          <option value="boleto">Envio de boleto</option>
-          <option value="envioRedes">Envio de redes</option>
-          <option value="envioProtocolo">Envio de protocolo</option>
-          <option value="envioToken">Envio de token</option>
-          <option value="formularioReembolso">Formulário de reembolso</option>
-          <option value="guiaContratual">Guia de leitura contratual</option>
-          <option value="inclusaoDepGDFC">Inclusão de dependentes — GDF</option>
-          <option value="contratoNovo">Informações sobre o plano (contrato novo)</option>
-          <option value="semCPF">Solicitar o CPF</option>
-          <option value="solicitaCancelamento">Solicitação de cancelamento</option>
-          <option value="tentativaContato">Tentativa de contato</option>
+          <option value="">Carregando…</option>
         </select>
       </div>
       
 
       <div class="form-group" id="phoneGroup" style="display:none;">
-        <label for="phoneContact">Telefone cadastrado</label>
-        <input type="text" id="phoneContact" placeholder="Ex: (61) 99999-0000">
+        <label for="phoneContact" data-setting="form.phone.label">Telefone cadastrado</label>
+        <input type="text" id="phoneContact" placeholder="Ex: (61) 99999-0000" data-setting-placeholder="form.phone.placeholder">
       </div>
 
       <div id="cancelamentoGroup" style="display:none;">
         <div class="form-group">
-          <label>Vigência mínima de 12 meses cumprida?</label>
+          <label data-setting="form.cancel.vigencia.label">Vigência mínima de 12 meses cumprida?</label>
           <div class="radio-group">
             <label class="radio-pill">
               <input type="radio" name="vigencia" value="sim">
               <span class="radio-pill-dot"></span>
-              Sim — sem multa
+              <span data-setting="form.cancel.vigencia.yes">Sim — sem multa</span>
             </label>
             <label class="radio-pill">
               <input type="radio" name="vigencia" value="nao">
               <span class="radio-pill-dot"></span>
-              Não — com multa
+              <span data-setting="form.cancel.vigencia.no">Não — com multa</span>
             </label>
           </div>
         </div>
 
         <div class="form-group">
-          <label>Mensalidades em aberto?</label>
+          <label data-setting="form.cancel.mensalidades.label">Mensalidades em aberto?</label>
           <div class="radio-group">
             <label class="radio-pill">
               <input type="radio" name="mensalidade" value="sim">
               <span class="radio-pill-dot"></span>
-              Sim — em aberto
+              <span data-setting="form.cancel.mensalidades.yes">Sim — em aberto</span>
             </label>
             <label class="radio-pill">
               <input type="radio" name="mensalidade" value="nao">
               <span class="radio-pill-dot"></span>
-              Não — em dia
+              <span data-setting="form.cancel.mensalidades.no">Não — em dia</span>
             </label>
           </div>
         </div>
 
         <div class="form-group" id="mesMensalidadeGroup" style="display:none;">
-          <label for="mesMensalidade">Mês da última mensalidade devida</label>
-          <input type="text" id="mesMensalidade" placeholder="Ex: março/2025">
+          <label for="mesMensalidade" data-setting="form.cancel.mes.label">Mês da última mensalidade devida</label>
+          <input type="text" id="mesMensalidade" placeholder="Ex: março/2025" data-setting-placeholder="form.cancel.mes.placeholder">
         </div>
       </div>
 
       <div class="form-group" id="genderGroup">
-        <label>Sexo</label>
+        <label data-setting="form.gender.label">Sexo</label>
         <div class="radio-group">
           <label class="radio-pill">
             <input type="radio" name="gender" value="masculino">
             <span class="radio-pill-dot"></span>
-            Masculino
+            <span data-setting="form.gender.male">Masculino</span>
           </label>
           <label class="radio-pill">
             <input type="radio" name="gender" value="feminino">
             <span class="radio-pill-dot"></span>
-            Feminino
+            <span data-setting="form.gender.female">Feminino</span>
           </label>
           <label class="radio-pill">
             <input type="radio" name="gender" value="neutro">
             <span class="radio-pill-dot"></span>
-            Não sei
+            <span data-setting="form.gender.neutral">Não sei</span>
           </label>
         </div>
       </div>
 
       <div id="agendamentoGroup" style="display:none;">
         <div class="form-group">
-          <label for="agendEspecialidade">Especialidade</label>
-          <input type="text" id="agendEspecialidade" placeholder="Ex: Ortodontia, Endodontia...">
+          <label for="agendEspecialidade" data-setting="form.agendamento.specialty.label">Especialidade</label>
+          <input type="text" id="agendEspecialidade" placeholder="Ex: Ortodontia, Endodontia..." data-setting-placeholder="form.agendamento.specialty.placeholder">
         </div>
         <div class="form-group">
-          <label for="agendDataHora">Data e Hora</label>
-          <input type="text" id="agendDataHora" placeholder="Ex: 15/07/2025 às 14h30">
+          <label for="agendDataHora" data-setting="form.agendamento.datetime.label">Data e Hora</label>
+          <input type="text" id="agendDataHora" placeholder="Ex: 15/07/2025 às 14h30" data-setting-placeholder="form.agendamento.datetime.placeholder">
         </div>
         <div class="form-group">
-          <label for="agendClinica">Clínica (informações completas)</label>
-          <textarea id="agendClinica" rows="6" placeholder="Ex: Oral Plus Ltda&#10;Endereço: Av João Isper Gebrim, 457&#10;Bairro: Formosinha&#10;Cep: 73813-210&#10;Município: Formosa&#10;Uf: Goias&#10;Celular: (61)3631.5471" style="resize:vertical;"></textarea>
+          <label for="agendClinica" data-setting="form.agendamento.clinic.label">Clínica (informações completas)</label>
+          <textarea id="agendClinica" rows="6" placeholder="Ex: Oral Plus Ltda&#10;Endereço: Av João Isper Gebrim, 457&#10;Bairro: Formosinha&#10;Cep: 73813-210&#10;Município: Formosa&#10;Uf: Goias&#10;Celular: (61)3631.5471" data-setting-placeholder="form.agendamento.clinic.placeholder" style="resize:vertical;"></textarea>
         </div>
       </div>
 
       <button class="btn" onclick="generateText()">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        Gerar texto
+        <span data-setting="button.generate">Gerar texto</span>
       </button>
 
       <div class="result-section">
         <div class="result-header">
-          <span class="result-tag">Resultado</span>
+          <span class="result-tag" data-setting="result.label">Resultado</span>
         </div>
-        <div id="generatedText" class="result-area">Preencha os campos acima e clique em "Gerar texto".</div>
+        <div id="generatedText" class="result-area" data-setting="generator.result.initial">Preencha os campos acima e clique em "Gerar texto".</div>
         <div class="result-actions">
           <button class="btn-ghost" onclick="copiarTexto('generatedText', this)">
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-            Copiar texto
+            <span data-setting="button.copy_text">Copiar texto</span>
           </button>
         </div>
       </div>
@@ -245,28 +224,28 @@
   <!-- Pró-rata -->
   <div id="prorata" class="content-section">
     <div class="page-header">
-      <h1 class="page-title">Calculadora de pró-rata</h1>
-      <p class="page-subtitle">Calcule o valor proporcional por dias utilizados.</p>
+      <h1 class="page-title" data-setting="page.prorata.title">Calculadora de pró-rata</h1>
+      <p class="page-subtitle" data-setting="page.prorata.subtitle">Calcule o valor proporcional por dias utilizados.</p>
     </div>
     <div class="card">
       <div class="form-group">
-        <label for="valorTotalProduto">Valor total do plano (R$)</label>
-        <input type="number" id="valorTotalProduto" placeholder="Ex: 89.90" step="0.01" min="0">
+        <label for="valorTotalProduto" data-setting="calc.prorata.value.label">Valor total do plano (R$)</label>
+        <input type="number" id="valorTotalProduto" placeholder="Ex: 89.90" data-setting-placeholder="calc.prorata.value.placeholder" step="0.01" min="0">
       </div>
 
       <div class="form-group">
-        <label for="quantidadeDias">Quantidade de dias (1–31)</label>
-        <input type="number" id="quantidadeDias" placeholder="Ex: 15" min="1" max="31">
+        <label for="quantidadeDias" data-setting="calc.prorata.days.label">Quantidade de dias (1–31)</label>
+        <input type="number" id="quantidadeDias" placeholder="Ex: 15" data-setting-placeholder="calc.prorata.days.placeholder" min="1" max="31">
       </div>
 
       <button class="btn" onclick="calcularProporcional()">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 7H6a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-3M13 3h8m0 0v8m0-8L11 13"/></svg>
-        Calcular
+        <span data-setting="button.calculate">Calcular</span>
       </button>
 
       <div class="result-section">
-        <div class="result-header"><span class="result-tag">Resultado</span></div>
-        <div id="resultadoProporcional" class="result-area">Digite os valores acima para calcular o valor proporcional.</div>
+        <div class="result-header"><span class="result-tag" data-setting="result.label">Resultado</span></div>
+        <div id="resultadoProporcional" class="result-area" data-setting="calculator.prorata.result.initial">Digite os valores acima para calcular o valor proporcional.</div>
       </div>
     </div>
   </div>
@@ -274,28 +253,28 @@
   <!-- Multa -->
   <div id="multa" class="content-section">
     <div class="page-header">
-      <h1 class="page-title">Calculadora de multa contratual</h1>
-      <p class="page-subtitle">Calcule a multa de rescisão com base nos meses restantes.</p>
+      <h1 class="page-title" data-setting="page.multa.title">Calculadora de multa contratual</h1>
+      <p class="page-subtitle" data-setting="page.multa.subtitle">Calcule a multa de rescisão com base nos meses restantes.</p>
     </div>
     <div class="card">
       <div class="form-group">
-        <label for="valorMensalidade">Valor da mensalidade (R$)</label>
-        <input type="number" id="valorMensalidade" placeholder="Ex: 59.90" step="0.01" min="0">
+        <label for="valorMensalidade" data-setting="calc.multa.value.label">Valor da mensalidade (R$)</label>
+        <input type="number" id="valorMensalidade" placeholder="Ex: 59.90" data-setting-placeholder="calc.multa.value.placeholder" step="0.01" min="0">
       </div>
 
       <div class="form-group">
-        <label for="mesesFaltantes">Meses restantes no contrato</label>
-        <input type="number" id="mesesFaltantes" placeholder="Ex: 8" min="0">
+        <label for="mesesFaltantes" data-setting="calc.multa.months.label">Meses restantes no contrato</label>
+        <input type="number" id="mesesFaltantes" placeholder="Ex: 8" data-setting-placeholder="calc.multa.months.placeholder" min="0">
       </div>
 
       <button class="btn" onclick="calcularMulta()">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 7H6a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-3M13 3h8m0 0v8m0-8L11 13"/></svg>
-        Calcular
+        <span data-setting="button.calculate">Calcular</span>
       </button>
 
       <div class="result-section">
-        <div class="result-header"><span class="result-tag">Resultado</span></div>
-        <div id="multaResultado" class="result-area">Digite os valores acima para calcular a multa.</div>
+        <div class="result-header"><span class="result-tag" data-setting="result.label">Resultado</span></div>
+        <div id="multaResultado" class="result-area" data-setting="calculator.multa.result.initial">Digite os valores acima para calcular a multa.</div>
       </div>
     </div>
   </div>
@@ -303,24 +282,24 @@
   <!-- Abrangências -->
   <div id="abrangencias" class="content-section">
     <div class="page-header">
-      <h1 class="page-title">Abrangências dos planos</h1>
-      <p class="page-subtitle">Consulte os detalhes de cobertura pelo código do produto (Registro ANS).</p>
+      <h1 class="page-title" data-setting="page.abrangencias.title">Abrangências dos planos</h1>
+      <p class="page-subtitle" data-setting="page.abrangencias.subtitle">Consulte os detalhes de cobertura pelo código do produto (Registro ANS).</p>
     </div>
     <div class="card">
       <div class="form-group">
-        <label for="inputNumber">Código do produto (Registro ANS)</label>
-        <input type="number" id="inputNumber" placeholder="Ex: 473269153">
+        <label for="inputNumber" data-setting="calc.abrangencias.code.label">Código do produto (Registro ANS)</label>
+        <input type="number" id="inputNumber" placeholder="Ex: 473269153" data-setting-placeholder="calc.abrangencias.code.placeholder">
       </div>
 
       <button class="btn" onclick="consultarPlano()">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        Consultar plano
+        <span data-setting="button.consult_plan">Consultar plano</span>
       </button>
 
       <div class="result-section">
-        <div class="result-header"><span class="result-tag">Resultado</span></div>
+        <div class="result-header"><span class="result-tag" data-setting="result.label">Resultado</span></div>
         <div id="result" class="result-area">
-          <span id="resultado">Digite o código do produto para consultar.</span>
+          <span id="resultado" data-setting="calculator.abrangencias.result.initial">Digite o código do produto para consultar.</span>
         </div>
       </div>
     </div>
@@ -329,8 +308,8 @@
   <!-- Administração -->
   <div id="admin" class="content-section">
     <div class="page-header">
-      <h1 class="page-title">Administração</h1>
-      <p class="page-subtitle">Atualize os textos que aparecem no gerador sem alterar a página.</p>
+      <h1 class="page-title" data-setting="page.admin.title">Administração</h1>
+      <p class="page-subtitle" data-setting="page.admin.subtitle">Atualize os textos que aparecem no gerador sem alterar a página.</p>
     </div>
 
     <div class="card admin-card" id="adminLoginCard">
@@ -388,6 +367,13 @@
         </div>
         <button class="btn-ghost" type="button" onclick="addNewTemplate()">+ Adicionar mensagem</button>
       </div>
+
+      <details class="admin-settings" id="adminSettingsBlock">
+        <summary>Textos da interface (menus, campos e botões)</summary>
+        <p class="admin-description">Altere os nomes que aparecem na tela. A aparência continua sendo definida pelo CSS.</p>
+        <div id="appSettingsList"></div>
+        <button class="btn-ghost" type="button" onclick="saveAppSettings()">Salvar textos da interface</button>
+      </details>
 
       <div id="adminSaveMessage" class="admin-message" role="status"></div>
       <button class="btn" type="button" onclick="saveTemplates()">Salvar mensagem selecionada</button>
