@@ -1089,3 +1089,60 @@ body.dark-mode input,
 body.dark-mode textarea {
   color: #f8fafc;
 }
+/* Corrige a visibilidade dos campos do formulário */
+.form-group input,
+.form-group select,
+.form-group textarea,
+input,
+select,
+textarea {
+  color: #334155;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8;
+  opacity: 1;
+}
+
+/* Opções dentro das listas de seleção */
+select option {
+  color: #334155;
+  background-color: #ffffff;
+}
+
+/* Textos e opções dos botões de escolha */
+.form-group label,
+.radio-group label,
+.checkbox-group label,
+.form-check label {
+  color: #334155 !important;
+}
+
+/* Mantém os títulos da página brancos */
+.page-header .page-title,
+.page-header .page-subtitle {
+  color: #ffffff !important;
+}
+
+/* Preserva o contraste no modo escuro */
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea,
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+  color: #f1f5f9;
+}
+
+body.dark-mode select option {
+  color: #f1f5f9;
+  background-color: #1e293b;
+}
+
+body.dark-mode .form-group label,
+body.dark-mode .radio-group label,
+body.dark-mode .checkbox-group label,
+body.dark-mode .form-check label {
+  color: #f1f5f9 !important;
+}
